@@ -1,0 +1,6 @@
+{
+  "appId": "com.falor.fofac",
+  "appName": "fofac",
+  "webDir": "www",
+  "ios": { "contentInset": "never" }
+}

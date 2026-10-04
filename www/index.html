@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>fofac</title>
+<style>
+:root{--bg:#e8ebf2;--card:#fff;--tx:#12151c;--mu:#6b7385;--ac:#3050ff;--acs:#e3e8ff;--ok:#16895a;--oks:#dcf2e8;--no:#d63c48;--nos:#fbe3e5;--am:#a86400;--ams:#fdefd3;--bd:#d3d8e5;--sh:0 1px 2px rgba(18,21,28,.05),0 14px 30px -14px rgba(30,45,110,.28);--serif:ui-serif,"New York",Georgia,"Times New Roman",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d13;--card:#151926;--tx:#eef0f6;--mu:#8f98ad;--ac:#8497ff;--acs:#1e2547;--ok:#4fc994;--oks:#12332a;--no:#ff7a84;--nos:#3a1c21;--am:#e8a83a;--ams:#3a2c10;--bd:#262c3d;--sh:none}}
+:root[data-theme="dark"]{--bg:#0b0d13;--card:#151926;--tx:#eef0f6;--mu:#8f98ad;--ac:#8497ff;--acs:#1e2547;--ok:#4fc994;--oks:#12332a;--no:#ff7a84;--nos:#3a1c21;--am:#e8a83a;--ams:#3a2c10;--bd:#262c3d;--sh:none}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,Roboto,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;display:flex;justify-content:center;padding:28px 16px 40px}
+.app{width:100%;max-width:460px}
+h1{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
+h2{font-family:var(--serif)}
+.sub{color:var(--mu);font-size:14px;margin-bottom:28px}
+.card{padding:0}
+.center{text-align:center}
+.lead{font-size:16px;line-height:1.55;color:var(--mu);margin:8px 0 18px}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mu);margin-bottom:12px;font-variant-numeric:tabular-nums}
+.dots{display:flex;gap:5px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--no)}.dots i.off{opacity:.2}
+.prog{height:6px;border-radius:99px;background:var(--bd);overflow:hidden;margin-bottom:26px}
+.prog i{display:block;height:100%;border-radius:99px;background:var(--ac);width:0;transition:width .4s ease}
+.tag{display:inline-block;font-size:12px;font-weight:600;color:var(--ac);background:var(--acs);border-radius:99px;padding:5px 12px;margin-bottom:14px}
+.q{font-family:var(--serif);font-size:25px;line-height:1.35;font-weight:600;margin:0 0 6px;background:var(--card);border-radius:24px;padding:30px 22px;box-shadow:var(--sh)}
+.q b{color:var(--ac);font-weight:700}
+.ru{color:var(--mu);font-size:14px;margin:12px 6px 24px;filter:blur(5px);cursor:pointer;user-select:none;transition:filter .2s}
+.ru.show{filter:none}
+button{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid transparent;border-radius:16px;padding:16px 18px;text-align:left;cursor:pointer;font-size:16px;transition:background .15s,color .15s,border-color .15s,transform .1s}
+button:active:not(:disabled){transform:scale(.985)}
+.opts{display:grid;gap:10px}
+.opts button{box-shadow:var(--sh);font-weight:500}
+button:hover:not(:disabled){border-color:var(--ac)}
+button.ok{background:var(--oks);color:var(--ok);border-color:var(--ok)}
+button.no{background:var(--nos);color:var(--no);border-color:var(--no)}
+.big{background:var(--ac);color:#fff;text-align:center;font-weight:600;width:100%;margin-top:22px;padding:17px;border-radius:16px}
+.big:hover:not(:disabled){border-color:transparent;filter:brightness(1.08)}
+.big:disabled{opacity:.4;cursor:default}
+.big.alt{background:var(--card);color:var(--tx);box-shadow:var(--sh);margin-top:12px;line-height:1.5}
+.big.alt:hover:not(:disabled){border-color:var(--ac)}
+.fb{margin-top:18px;padding:16px 18px;border-radius:16px;background:var(--card);box-shadow:var(--sh);font-size:15px;line-height:1.65}
+.fb b{font-weight:600}
+.yes{color:var(--ok);font-weight:700}.nope{color:var(--no);font-weight:700}.hint{color:var(--mu)}
+.score{font-family:var(--serif);font-size:84px;font-weight:700;color:var(--ac);letter-spacing:-.03em;line-height:1.1}
+.words{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.words button{padding:11px 15px;font-size:19px;border-radius:12px;box-shadow:var(--sh)}
+.lv{display:flex;gap:4px;margin:14px 0;background:var(--bd);border-radius:16px;padding:4px}
+.lv button{flex:1;text-align:center;padding:12px 4px;border:none;border-radius:12px;font-size:14px;background:transparent;color:var(--mu);font-weight:500}
+.lv button:hover:not(:disabled){border-color:transparent;color:var(--tx)}
+.lv button.sel{background:var(--card);color:var(--ac);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.quit{padding:8px 10px;font-size:14px;color:var(--mu);background:transparent;border:none;border-radius:10px}
+.quit:hover:not(:disabled){background:transparent;color:var(--tx);border-color:transparent}
+.quit.arm,.quit.rd{color:var(--no)}
+.srsbar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mu);margin-bottom:18px}
+.srsbar .quit{margin-left:-10px}
+.fc{background:var(--card);border-radius:28px;box-shadow:var(--sh);padding:36px 24px;min-height:300px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer}
+.fc.open{cursor:default}
+.fq{font-family:var(--serif);font-size:30px;line-height:1.3;font-weight:600;white-space:pre-wrap;overflow-wrap:anywhere}
+.fh{margin-top:26px;font-size:13px;color:var(--mu)}
+.fa{margin-top:24px;padding-top:24px;border-top:1.5px dashed var(--bd);font-size:22px;font-weight:600;color:var(--ac);white-space:pre-wrap;overflow-wrap:anywhere;animation:rv .25s ease}
+.ft{margin-top:10px;font-size:15px;color:var(--mu);white-space:pre-wrap;animation:rv .25s ease}
+@keyframes rv{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fa,.ft{animation:none}}
+.rt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.rt div{text-align:center}
+.rt small{display:block;color:var(--mu);font-size:12px;margin:0 0 6px}
+.rt button{width:100%;text-align:center;padding:15px 2px;font-size:14px;font-weight:600;border-radius:14px}
+.rt .r0{background:var(--nos);color:var(--no)}.rt .r1{background:var(--ams);color:var(--am)}.rt .r2{background:var(--acs);color:var(--ac)}.rt .r3{background:var(--oks);color:var(--ok)}
+textarea,input[type=number]{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:14px;padding:13px 15px;width:100%;resize:vertical;font-size:16px}
+textarea:focus,input:focus{outline:none;border-color:var(--ac)}
+.lb{display:block;font-size:13px;font-weight:500;color:var(--mu);margin:18px 0 6px}
+.row,.pk{display:flex;gap:6px;align-items:center;background:var(--card);border-radius:14px;padding:10px 6px 10px 16px;margin-bottom:8px;box-shadow:var(--sh)}
+.row .tx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
+.pk .tx{flex:1;font-size:15px;line-height:1.5}
+.row small,.pk small{color:var(--mu);white-space:nowrap;font-size:12px}
+.mn{display:flex;gap:8px;align-items:center}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.sent{display:block;background:var(--card);border-radius:24px;padding:30px 22px;box-shadow:var(--sh);font-family:var(--serif);font-size:26px;line-height:1.9;font-weight:600;margin:0 0 6px}
+.sent button{display:inline;background:transparent;border:none;box-shadow:none;padding:2px 4px;margin:0;font:inherit;color:inherit;border-radius:8px;text-decoration:underline dotted var(--mu);text-underline-offset:6px;text-decoration-thickness:1.5px}
+.sent button:hover:not(:disabled){background:var(--acs);color:var(--ac)}
+.sent button:disabled{text-decoration:none}
+.sent button.ok{background:var(--oks);color:var(--ok)}
+.sent button.no{background:var(--nos);color:var(--no)}
+</style></head><body>
+<div class="app">
+<h1>fofac</h1>
+<div class="sub">Тренажёр грамматики: A2 → B2</div>
+<div class="card" id="box"></div>
+</div>
+<script>
+// [sentence with ___, options, correct index, topic, explanation(ru), translation(ru), level 1|2|3]
+const Q=[
+["She ___ a project manager.",["is","are","am"],0,"to be","She → is.","Она менеджер проекта.",1],
+["They ___ in the office now.",["is","are","am"],1,"to be","They → are.","Они сейчас в офисе.",1],
+["He usually ___ to work by bus.",["go","goes","going"],1,"Present Simple","he/she/it + глагол с -s.","Он обычно ездит на работу на автобусе.",1],
+["I ___ coffee in the morning.",["don't drink","doesn't drink","not drink"],0,"Present Simple","С I используем don't.","Я не пью кофе по утрам.",1],
+["___ she speak English?",["Do","Does","Is"],1,"Present Simple","Вопрос с she → Does.","Она говорит по-английски?",1],
+["Look! It ___ now.",["rains","is raining","rained"],1,"Present Continuous","Действие прямо сейчас: is + глагол-ing.","Смотри! Сейчас идёт дождь.",1],
+["We ___ a meeting at the moment.",["have","are having","has"],1,"Present Continuous","«At the moment» → Continuous.","Сейчас у нас совещание.",1],
+["Yesterday I ___ a new client.",["meet","met","meeted"],1,"Past Simple","meet → met (неправильный глагол).","Вчера я встретил нового клиента.",1],
+["She ___ the report last week.",["finish","finished","finishes"],1,"Past Simple","Правильный глагол + -ed.","Она закончила отчёт на прошлой неделе.",1],
+["Did you ___ the email?",["send","sent","sending"],0,"Past Simple","После did — начальная форма.","Ты отправил письмо?",1],
+["I have ___ apple.",["a","an","the"],1,"Articles","Перед гласным звуком → an.","У меня есть яблоко.",1],
+["I need ___ new laptop for work.",["a","an","the"],0,"Articles","Первое упоминание, согласный звук → a.","Мне нужен новый ноутбук для работы.",1],
+["The meeting is ___ Monday.",["in","on","at"],1,"Prepositions","Дни недели → on.","Встреча в понедельник.",1],
+["I get up ___ 7 o'clock.",["in","on","at"],2,"Prepositions","Точное время → at.","Я встаю в 7 часов.",1],
+["My birthday is ___ June.",["in","on","at"],0,"Prepositions","Месяцы → in.","Мой день рождения в июне.",1],
+["There ___ two chairs in the room.",["is","are","be"],1,"There is/are","Множественное число → are.","В комнате два стула.",1],
+["I have ___ money left.",["a few","a little","many"],1,"Quantifiers","Money неисчисляемое → a little.","У меня осталось немного денег.",1],
+["This task is ___ than that one.",["easy","more easy","easier"],2,"Comparatives","Короткое прилагательное + -er.","Эта задача проще той.",1],
+["This project is ___ than the last one.",["more important","importanter","most important"],0,"Comparatives","Длинное прилагательное → more.","Этот проект важнее прошлого.",1],
+["I ___ never been to Sweden.",["have","has","did"],0,"Present Perfect","I have + V3.","Я никогда не был в Швеции.",2],
+["She ___ already finished the plan.",["have","has","is"],1,"Present Perfect","she + has + V3.","Она уже закончила план.",2],
+["We have worked here ___ 2022.",["for","since","from"],1,"Present Perfect","Since + момент начала.","Мы работаем здесь с 2022 года.",2],
+["He has lived in Omsk ___ five years.",["for","since","during"],0,"Present Perfect","For + период.","Он живёт в Омске пять лет.",2],
+["You ___ wear a helmet on the site. It's the rule.",["must","can","may"],0,"Modals","Must — обязанность/правило.","На площадке нужно носить каску. Это правило.",2],
+["___ you help me with this report?",["Could","Must","Do"],0,"Modals","Could/Can — вежливая просьба.","Не могли бы вы помочь мне с отчётом?",2],
+["You ___ worry. Everything is fine.",["don't have to","mustn't","can't to"],0,"Modals","Don't have to — не обязательно.","Не нужно волноваться.",2],
+["If it rains, we ___ at home.",["stay","will stay","stayed"],1,"First Conditional","If + Present, will + глагол.","Если пойдёт дождь, мы останемся дома.",2],
+["If I ___ more time, I would learn Swedish.",["have","had","will have"],1,"Second Conditional","If + Past, would + глагол.","Будь у меня больше времени, я бы учил шведский.",2],
+["I'm going to ___ a team next year.",["manage","managing","to managing"],0,"Going to","be going to + начальная форма.","В следующем году я собираюсь руководить командой.",2],
+["The report ___ by the manager yesterday.",["wrote","was written","is written"],1,"Passive","Was + V3 — действие в прошлом.","Отчёт написал менеджер вчера.",2],
+["She said she ___ tired.",["is","was","be"],1,"Reported speech","Согласование времён: is → was.","Она сказала, что устала.",2],
+["I enjoy ___ with people.",["work","to work","working"],2,"Gerund","После enjoy — глагол с -ing.","Мне нравится работать с людьми.",2],
+["I want ___ a project manager.",["be","to be","being"],1,"Infinitive","После want — to + глагол.","Я хочу быть менеджером проекта.",1],
+["She is the ___ person in our team.",["good","better","best"],2,"Superlatives","The + best.","Она лучший человек в нашей команде.",2],
+["He doesn't have ___ experience.",["some","any","a"],1,"some/any","В отрицаниях → any.","У него нет опыта.",1],
+["How ___ people work in your team?",["much","many","a lot"],1,"Quantifiers","Исчисляемое → many.","Сколько людей работает в вашей команде?",1],
+["There ___ a meeting at 3 pm.", ["is", "are", "be"], 0, "There is/are", "Meeting — единственное число: there is.", "В 3 часа будет встреча.", 1, ["", "are — для множественного числа", "be — здесь нужна форма is/are"]],
+["I ___ to the gym on Mondays.", ["go", "goes", "going"], 0, "Present Simple", "С I глагол без -s.", "По понедельникам я хожу в спортзал.", 1, ["", "goes — только для he/she/it", "going — без is/am/are так не бывает"]],
+["What time ___ you finish work?", ["do", "does", "are"], 0, "Present Simple", "Вопрос с you → do.", "Во сколько ты заканчиваешь работу?", 1, ["", "does — для he/she/it", "are — с глаголом finish нужен do/does"]],
+["She ___ her keys yesterday.", ["lost", "loses", "losed"], 0, "Past Simple", "lose → lost (неправильный глагол).", "Вчера она потеряла ключи.", 1, ["", "loses — настоящее время, а есть yesterday", "у lose форма lost, а не losed"]],
+["My brother is ___ than me.", ["tall", "taller", "tallest"], 1, "Comparatives", "Есть than → сравнительная степень: taller.", "Мой брат выше меня.", 1, ["tall — нужна сравнительная степень, ведь есть than", "", "tallest — превосходная степень, а тут than"]],
+["We ___ going to visit Paris next month.", ["is", "are", "am"], 1, "Going to", "С we → are going to.", "В следующем месяце мы поедем в Париж.", 1, ["is — только для he/she/it", "", "am — только с I"]],
+["I can't find ___ pen.", ["my", "me", "mine"], 0, "Pronouns", "Перед существительным — притяжательное my.", "Я не могу найти свою ручку.", 1, ["", "me — это «меня/мне», а перед существительным нужно my", "mine — стоит без существительного"]],
+["There isn't ___ milk in the fridge.", ["some", "any", "a"], 1, "some/any", "В отрицаниях → any.", "В холодильнике нет молока.", 1, ["some — в отрицаниях обычно any", "", "a — milk неисчисляемое, a нельзя"]],
+["Have you finished the report ___?", ["yet", "already", "since"], 0, "Present Perfect", "В вопросах и отрицаниях — yet.", "Ты уже закончил отчёт?", 2, ["", "already — обычно в утверждениях, а в вопросе yet", "since — нужен момент начала, а не «уже»"]],
+["When I was a child, I ___ play football every day.", ["use to", "used to", "was used to"], 1, "Used to", "used to + глагол — привычка в прошлом.", "В детстве я каждый день играл в футбол.", 2, ["use to — в утверждении нужна форма used to", "", "was used to — значит «привык», а не «раньше делал»"]],
+["The woman ___ works here is my aunt.", ["who", "which", "what"], 0, "Relative clauses", "Для людей — who.", "Женщина, которая здесь работает, моя тётя.", 2, ["", "which — для предметов, а woman — человек", "what — так союзом не используется"]],
+["You ___ see a doctor if you feel ill.", ["should", "must to", "can to"], 0, "Modals", "should — совет: «стоило бы».", "Если плохо себя чувствуешь, лучше сходить к врачу.", 2, ["", "после must to не ставят", "после can to не ставят"]],
+["This room is ___ small for ten people.", ["enough", "too", "very"], 1, "too/enough", "too — «слишком» (больше, чем нужно).", "Эта комната слишком мала для десяти человек.", 2, ["enough — значит «достаточно», смысл другой", "", "very — «очень», но не «слишком, чтобы вместить»"]],
+["English ___ in many countries.", ["speaks", "is spoken", "spoke"], 1, "Passive", "Passive Present: is + V3.", "На английском говорят во многих странах.", 2, ["speaks — активная форма, а язык сам не говорит", "", "spoke — прошедшее, а речь о настоящем"]],
+["She asked me where I ___.", ["live", "lived", "do live"], 1, "Reported speech", "После asked время сдвигается: live → lived.", "Она спросила меня, где я живу.", 2, ["live — после asked время сдвигается назад", "", "do live — в косвенном вопросе do не нужен"]],
+["I'm tired ___ I worked all night.", ["because", "so", "but"], 0, "Linking words", "because — причина.", "Я устал, потому что работал всю ночь.", 2, ["", "so — даёт следствие, а тут причина", "but — «но», по смыслу не подходит"]],
+["If I ___ the answer, I would tell you.", ["know", "knew", "had known"], 1, "Second Conditional", "Нереальное настоящее: If + Past, would + глагол.", "Если бы я знал ответ, я бы тебе сказал.", 3, ["know — с would после if нужен Past", "", "had known — это про прошлое (Third Conditional)"]],
+["If she ___ harder, she would have passed the exam.", ["studied", "had studied", "would study"], 1, "Third Conditional", "Нереальное прошлое: If + Past Perfect, would have + V3.", "Если бы она училась усерднее, она бы сдала экзамен.", 3, ["studied — для третьего условия нужен Past Perfect", "", "would study — would после if не ставят"]],
+["I wish I ___ more free time.", ["have", "had", "would have"], 1, "Wishes", "wish + Past — желание о настоящем.", "Жаль, что у меня мало свободного времени.", 3, ["have — после wish нужен Past", "", "would have — после wish о настоящем так не говорят"]],
+["By next year, she ___ here for ten years.", ["will work", "will have worked", "works"], 1, "Future Perfect", "К моменту в будущем: will have + V3.", "К следующему году она проработает здесь десять лет.", 3, ["will work — не показывает срок, завершённый к моменту", "", "works — настоящее время, а нужен срок к будущему моменту"]],
+["He ___ have left already; his car is gone.", ["must", "should", "would"], 0, "Modals of deduction", "must have + V3 — уверенный вывод о прошлом.", "Он, должно быть, уже ушёл: его машины нет.", 3, ["", "should — «следовало бы», а не вывод", "would — не выражает уверенный вывод"]],
+["The project, ___ was delayed, is now on track.", ["who", "which", "what"], 1, "Non-defining clauses", "Для предметов в уточнении через запятую — which.", "Проект, который задержали, теперь идёт по плану.", 3, ["who — для людей, а project — предмет", "", "what — так союзом не используется"]],
+["She suggested ___ the meeting to Friday.", ["to move", "moving", "move"], 1, "Gerund", "После suggest — глагол с -ing.", "Она предложила перенести встречу на пятницу.", 3, ["to move — после suggest to не ставят", "", "move — после suggest нужен -ing"]],
+["Not only ___ late, but he also forgot the documents.", ["he was", "was he", "he is"], 1, "Inversion", "После Not only — инверсия: was he.", "Он не только опоздал, но и забыл документы.", 3, ["he was — после Not only порядок слов обратный", "", "he is — нужно прошедшее и инверсия"]],
+["I'm used to ___ early.", ["get up", "getting up", "got up"], 1, "Gerund", "be used to + -ing — «привык».", "Я привык рано вставать.", 3, ["get up — после used to нужен -ing", "", "got up — после used to нужен -ing"]],
+["She is ___ for the quality control.", ["responsible", "responsive", "response"], 0, "Word forms", "responsible for — «отвечает за».", "Она отвечает за контроль качества.", 3, ["", "responsive — «отзывчивый», смысл другой", "response — существительное, а нужно прилагательное"]]
+];
+const W=[
+["","are — для you/we/they и мн. числа","am — только с I"],
+["is — только для he/she/it","","am — только с I"],
+["С he нужна форма с -s: goes","","going — без is/am/are так не бывает"],
+["","doesn't — только для he/she/it","отрицание строится через don't, а не просто not"],
+["Do — для I/you/we/they, а she требует does","","Is — с глаголом speak нужен do/does"],
+["rains — это привычка, а не действие сейчас","","rained — прошедшее, а речь про сейчас"],
+["have — это Simple, а «at the moment» требует Continuous","","has — не сочетается с we"],
+["meet — настоящее время, а есть yesterday","","у meet неправильная форма: met, а не meeted"],
+["finish — настоящее время, а есть last week","","finishes — тоже настоящее время"],
+["","после did глагол остаётся в начальной форме","после did нельзя -ing"],
+["a — только перед согласным звуком","","the — нужно конкретное яблоко, а здесь любое"],
+["","an — только перед гласным звуком, а laptop начинается на согласный","the — предмет пока не конкретный, это первое упоминание"],
+["in — для месяцев и годов","","at — для точного времени"],
+["in — для месяцев, лет и частей дня","on — для дней и дат",""],
+["","on — для дней и дат","at — для точного времени"],
+["is — только для единственного числа","","be — здесь нужна форма is/are"],
+["a few — только с исчисляемыми","","many — тоже для исчисляемых, а money неисчисляемое"],
+["есть than, значит нужна сравнительная степень: easier","more easy — у коротких слов степень строится через -er","" ],
+["","у длинных слов -er не добавляют, нужно more","most — превосходная степень, а тут than"],
+["","has — только для he/she/it","did — не строит Present Perfect, нужен have/has"],
+["have — для I/you/we/they, а she требует has","","is — не строит Perfect, нужен has + V3"],
+["for — для периода (five years), а 2022 — точка старта","","from — так с Present Perfect не используют"],
+["","since — нужен момент начала, а five years — это период","during — с Present Perfect так не используют"],
+["","can — «уметь/мочь», а не обязанность","may — «можно/возможно», а не обязанность"],
+["","Must — приказ, а не вежливая просьба","Do you help — вопрос о привычке, а не просьба"],
+["","mustn't — «нельзя», смысл противоположный","после can't не ставят to"],
+["в главной части нужен will: If + Present, will + глагол","","stayed — прошедшее, а речь о реальном будущем"],
+["have — это First Conditional, а с would нужен Past","","will не ставят сразу после if"],
+["","после going to нужна начальная форма, без -ing","to managing — лишнее to и лишнее -ing"],
+["wrote — активная форма, а отчёт не писал сам себя","","is written — настоящее время, а есть yesterday"],
+["is — в косвенной речи после said время сдвигается назад","","be — нужна форма was/is"],
+["после enjoy нужен глагол с -ing","после enjoy to не ставят",""],
+["после want нужно to","","being — после want -ing не ставят"],
+["good — нужна превосходная степень (the ...)","better — сравнительная, а с the и «in our team» нужна best",""],
+["some — в отрицаниях обычно any","","a — experience неисчисляемое, a нельзя"],
+["much — для неисчисляемых, а people исчисляемое","","a lot — после How нужно many/much"]
+];
+Q.forEach((q,n)=>{if(W[n])q[7]=W[n]});
+const E=[
+["She go to work by bus every day.",1,"Present Simple","She goes to work by bus every day.","С she/he/it глагол получает -s: goes.","Она ездит на работу на автобусе каждый день.",1],
+["He don't like coffee.",1,"Present Simple","He doesn't like coffee.","С he/she/it отрицание строится через doesn't.","Он не любит кофе.",1],
+["I am work in a big company.",1,"Present Simple","I work in a big company.","Am не нужен: это Present Simple, глагол один.","Я работаю в большой компании.",1],
+["They is happy with the results.",1,"to be","They are happy with the results.","С they нужно are.","Они довольны результатами.",1],
+["Yesterday we go to the meeting.",2,"Past Simple","Yesterday we went to the meeting.","Есть yesterday, значит прошедшее: go → went.","Вчера мы ходили на встречу.",1],
+["Did she finished the report?",2,"Past Simple","Did she finish the report?","После did глагол в начальной форме.","Она закончила отчёт?",1],
+["I didn't saw him yesterday.",2,"Past Simple","I didn't see him yesterday.","После didn't глагол в начальной форме: see.","Я не видел его вчера.",1],
+["I have a apple.",2,"Articles","I have an apple.","Перед гласным звуком нужен an.","У меня есть яблоко.",1],
+["The meeting is in Monday.",3,"Prepositions","The meeting is on Monday.","Дни недели: on.","Встреча в понедельник.",1],
+["I get up in 7 o'clock.",3,"Prepositions","I get up at 7 o'clock.","Точное время: at.","Я встаю в 7 часов.",1],
+["There is three people in the room.",1,"There is/are","There are three people in the room.","Три человека, значит множественное число: are.","В комнате три человека.",1],
+["How much people work here?",1,"Quantifiers","How many people work here?","People исчисляемое, поэтому many.","Сколько людей здесь работает?",1],
+["He is taller that me.",3,"Comparatives","He is taller than me.","В сравнении используем than.","Он выше меня.",1],
+["I am agree with you.",1,"Common mistakes","I agree with you.","Agree — глагол, am не нужен.","Я согласен с тобой.",1],
+["She have already finished the plan.",1,"Present Perfect","She has already finished the plan.","С she нужно has + V3.","Она уже закончила план.",2],
+["I live here since 2020.",1,"Present Perfect","I have lived here since 2020.","Since требует Present Perfect: have lived.","Я живу здесь с 2020 года.",2],
+["We have worked here for 2022.",4,"Present Perfect","We have worked here since 2022.","2022 — момент начала, значит since, а не for.","Мы работаем здесь с 2022 года.",2],
+["You must to wear a helmet.",2,"Modals","You must wear a helmet.","После must to не ставится.","Нужно носить каску.",2],
+["I enjoy to work with people.",2,"Gerund","I enjoy working with people.","После enjoy глагол с -ing.","Мне нравится работать с людьми.",2],
+["I want to being a project manager.",3,"Infinitive","I want to be a project manager.","После want to глагол в начальной форме: be, а не being.","Я хочу быть менеджером проекта.",2],
+["If it will rain, we stay at home.",2,"First Conditional","If it rains, we will stay at home.","If + Present, а will идёт в главной части.","Если пойдёт дождь, мы останемся дома.",2],
+["If I have more time, I would learn Swedish.",2,"Second Conditional","If I had more time, I would learn Swedish.","С would после if нужен Past: had.","Будь у меня больше времени, я бы учил шведский.",2],
+["The report was wrote by the manager.",3,"Passive","The report was written by the manager.","Passive: was + V3 (written).","Отчёт написал менеджер.",2],
+["Everyone are ready.",1,"Agreement","Everyone is ready.","Everyone — единственное число: is.","Все готовы.",2],
+["I'm interesting in this job.",1,"Adjectives -ed/-ing","I'm interested in this job.","Interested — «заинтересован», interesting — «интересный».","Меня интересует эта работа.",2],
+["I goed to school yesterday.", 1, "Past Simple", "I went to school yesterday.", "go — неправильный глагол: went.", "Вчера я ходил в школу.", 1],
+["There is two cats in the garden.", 1, "There is/are", "There are two cats in the garden.", "Две кошки — множественное число: are.", "В саду две кошки.", 1],
+["He is more tall than his brother.", 2, "Comparatives", "He is taller than his brother.", "У короткого слова степень строится через -er.", "Он выше своего брата.", 1],
+["She can to swim very well.", 2, "Modals", "She can swim very well.", "После can to не ставят.", "Она очень хорошо плавает.", 1],
+["I like play tennis.", 2, "Gerund", "I like playing tennis.", "После like глагол с -ing.", "Я люблю играть в теннис.", 1],
+["We have lunch at the 12 o'clock.", 4, "Articles", "We have lunch at 12 o'clock.", "Перед временем артикль не нужен.", "Мы обедаем в 12 часов.", 1],
+["I have seen him yesterday.", 1, "Present Perfect", "I saw him yesterday.", "С yesterday нужен Past Simple.", "Я видел его вчера.", 2],
+["She suggested to go by train.", 2, "Gerund", "She suggested going by train.", "После suggest — глагол с -ing.", "Она предложила поехать на поезде.", 2],
+["I'm looking forward to see you.", 4, "Gerund", "I'm looking forward to seeing you.", "После look forward to нужен -ing.", "С нетерпением жду встречи с тобой.", 2],
+["The man which lives next door is a doctor.", 2, "Relative clauses", "The man who lives next door is a doctor.", "Для людей — who, а не which.", "Мужчина, который живёт по соседству, врач.", 2],
+["She asked me what was my name.", 4, "Reported speech", "She asked me what my name was.", "В косвенном вопросе порядок слов прямой.", "Она спросила, как меня зовут.", 2],
+["He is too much tired to drive.", 3, "too/enough", "He is too tired to drive.", "Перед прилагательным: too tired, без much.", "Он слишком устал, чтобы вести машину.", 2],
+["If I would have more time, I would travel more.", 2, "Second Conditional", "If I had more time, I would travel more.", "После if would не ставят: нужен Past.", "Будь у меня больше времени, я бы больше путешествовал.", 3],
+["She wishes she can speak French.", 3, "Wishes", "She wishes she could speak French.", "После wish нужен Past: could.", "Она хотела бы уметь говорить по-французски.", 3],
+["Hardly he had arrived when it started to rain.", 1, "Inversion", "Hardly had he arrived when it started to rain.", "После hardly — инверсия: had he.", "Едва он приехал, как пошёл дождь.", 3],
+["I'm not used to work at night.", 4, "Gerund", "I'm not used to working at night.", "После be used to нужен -ing.", "Я не привык работать по ночам.", 3],
+["The company, who was founded in 1990, is very successful.", 2, "Non-defining clauses", "The company, which was founded in 1990, is very successful.", "Для компании (предмета) — which.", "Компания, основанная в 1990 году, очень успешна.", 3],
+["She must have forgot her keys.", 3, "Modals of deduction", "She must have forgotten her keys.", "После must have нужна форма V3: forgotten.", "Должно быть, она забыла ключи.", 3]
+];
+E.forEach(q=>q.err=true);
+
+const box=document.getElementById('box');
+let mode='mc',level=0,round=[],i=0,score=0,lives=3,streak=0,best=0,wrong=[];
+try{best=+localStorage.getItem('gq_best')||0}catch(e){}
+const dots=()=>[0,1,2].map(k=>`<i class="${k<lives?'':'off'}"></i>`).join('');
+const sh=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+function upd(){
+document.getElementById('hp').innerHTML=dots();
+document.getElementById('sc').textContent='Очки '+score+(streak>1?' · серия '+streak:'')}
+function home(){
+document.onkeydown=null;
+box.innerHTML=`<div class="center"><p class="lead">10 вопросов, 3 жизни. Выбери правильный вариант — после ответа увидишь объяснение.</p>
+<div class="sub">Рекорд: ${best} очков</div>
+<div class="lv" id="md"><button data-m="mc">Выбор ответа</button><button data-m="err">🔍 Найди ошибку</button></div>
+<div class="lv"><button data-l="1">A2</button><button data-l="2">B1</button><button data-l="3">B2</button><button data-l="0">Микс</button></div>
+<button class="big" id="go">Начать игру</button>
+<button class="big alt" id="srs"></button></div>`;
+const bs=box.querySelectorAll('.lv:not(#md) button');
+bs.forEach(b=>{if(+b.dataset.l===level)b.classList.add('sel');b.onclick=()=>{level=+b.dataset.l;bs.forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}});
+const ms=box.querySelectorAll('#md button');
+ms.forEach(b=>{if(b.dataset.m===mode)b.classList.add('sel');b.onclick=()=>{mode=b.dataset.m;ms.forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}});
+document.getElementById('go').onclick=start;document.getElementById('srs').onclick=deckScreen;srsInfo()}
+function start(){
+let pool=(mode=='err'?E:Q).filter(q=>level==0||q[6]==level);
+round=sh(pool).slice(0,10);i=0;score=0;lives=3;streak=0;wrong=[];mode=='err'?showErr():show()}
+function wireQuit(){
+const b=document.getElementById('qt');if(!b)return;let t;
+b.onclick=()=>{
+if(b.classList.contains('arm')){clearTimeout(t);home();return}
+b.classList.add('arm');b.textContent='Нажми ещё раз, чтобы выйти';
+t=setTimeout(()=>{b.classList.remove('arm');b.textContent='Выйти'},3000)}}
+function show(){
+const q=round[i];const idx=sh([0,1,2].slice(0,q[1].length));
+box.innerHTML=`<div style="text-align:right;margin-bottom:8px"><button class="quit" id="qt">Выйти</button></div><div class="bar"><span>Вопрос ${i+1}/${round.length}</span><span id="hp" class="dots">${dots()}</span><span id="sc">Очки ${score}${streak>1?' · серия '+streak:''}</span></div>
+<div class="prog"><i style="width:${i/round.length*100}%"></i></div>
+<span class="tag">${q[3]}</span><p class="q">${q[0].replace('___','<b>_____</b>')}</p><div class="ru" title="Нажми, чтобы посмотреть перевод" onclick="this.classList.toggle('show')">${q[5]}</div>
+<div class="opts">${idx.map(k=>`<button data-k="${k}">${q[1][k]}</button>`).join('')}</div><div id="fb"></div>`;
+box.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>answer(b,q));wireQuit()}
+function answer(b,q){
+const k=+b.dataset.k,ok=k===q[2];
+box.querySelectorAll('.opts button').forEach(x=>{x.disabled=true;if(+x.dataset.k===q[2])x.classList.add('ok')});
+if(ok){streak++;score+=10+Math.min(streak-1,5)*2}else{b.classList.add('no');lives--;streak=0;wrong.push(q)}
+upd();const done=lives===0||i===round.length-1;
+document.getElementById('fb').innerHTML=`<div class="fb">${ok?'<span class="yes">Верно!</span>':'<span class="nope">Неверно:</span> <b>'+q[1][k]+'</b> — '+q[7][k]+'.'}<br><span class="yes">Правильно:</span> <b>${q[0].replace('___',q[1][q[2]])}</b><br><span class="hint">${q[4]}</span></div><button class="big" id="nx">${done?'Результат':'Дальше →'}</button>`;
+document.getElementById('nx').onclick=()=>{if(done)end();else{i++;show()}}}
+function showErr(){
+const q=round[i];
+box.innerHTML=`<div style="text-align:right;margin-bottom:8px"><button class="quit" id="qt">Выйти</button></div><div class="bar"><span>Вопрос ${i+1}/${round.length}</span><span id="hp" class="dots">${dots()}</span><span id="sc">Очки ${score}${streak>1?' · серия '+streak:''}</span></div>
+<div class="prog"><i style="width:${i/round.length*100}%"></i></div>
+<span class="tag">${q[2]}</span><p class="ru" style="filter:none;cursor:default;margin-bottom:10px">Найди ошибку в предложении. Нажми на неправильное слово:</p>
+<div class="sent">${q[0].split(' ').map((w,k)=>`<button data-k="${k}">${w}</button>`).join(' ')}</div>
+<div class="ru" title="Нажми, чтобы посмотреть перевод" onclick="this.classList.toggle('show')">${q[5]}</div><div id="fb"></div>`;
+box.querySelectorAll('.sent button').forEach(b=>b.onclick=()=>answerErr(b,q));wireQuit()}
+function answerErr(b,q){
+const k=+b.dataset.k,ok=k===q[1],ws=q[0].split(' ');
+box.querySelectorAll('.sent button').forEach(x=>{x.disabled=true;if(+x.dataset.k===q[1])x.classList.add('ok')});
+if(ok){streak++;score+=10+Math.min(streak-1,5)*2}else{b.classList.add('no');lives--;streak=0;wrong.push(q)}
+upd();const done=lives===0||i===round.length-1;
+document.getElementById('fb').innerHTML=`<div class="fb">${ok?'<span class="yes">Верно!</span>':'<span class="nope">Неверно.</span> В слове <b>'+ws[k]+'</b> ошибки нет, ошибка в <b>'+ws[q[1]]+'</b>.'}<br><span class="yes">Правильно:</span> <b>${q[3]}</b><br><span class="hint">${q[4]}</span></div><button class="big" id="nx">${done?'Результат':'Дальше →'}</button>`;
+document.getElementById('nx').onclick=()=>{if(done)end();else{i++;showErr()}}}
+function end(){
+if(score>best){best=score;try{localStorage.setItem('gq_best',best)}catch(e){}}
+const topics=[...new Set(wrong.map(q=>q.err?q[2]:q[3]))];
+box.innerHTML=`<div class="center"><div class="sub" style="margin-bottom:0">${lives?'Раунд пройден':'Жизни закончились'}</div><div class="score">${score}</div><div class="sub">Рекорд: ${best}</div></div>
+${topics.length?`<div class="fb"><b>Повтори темы:</b> ${topics.join(', ')}</div>`:'<div class="fb">Без ошибок! Попробуй уровень сложнее.</div>'}
+<button class="big" id="again">Играть ещё</button>`;
+document.getElementById('again').onclick=home}
+/* ===== Уведомления (нативные, работают только в установленном приложении) ===== */
+async function planNotif(){
+const P=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications;if(!P)return;
+try{
+let p=await P.checkPermissions();
+if(p.display==='prompt'||p.display==='prompt-with-rationale')p=await P.requestPermissions();
+if(p.display!=='granted')return;
+const pend=await P.getPending();if(pend.notifications.length)await P.cancel({notifications:pend.notifications});
+const dues=SRS.list.filter(c=>c.st).map(c=>c.st.due).sort((a,b)=>a-b);if(!dues.length)return;
+const now=Date.now(),first=dues[0];let at;
+if(first<=now){at=new Date();at.setHours(10,0,0,0);if(+at<=now+6e4)at.setDate(at.getDate()+1)}
+else{at=new Date(first);at.setHours(10,0,0,0);if(+at<=now+6e4)at=new Date(Math.max(first,now+6e4))}
+const n=dues.filter(d=>d<=+at).length;
+await P.schedule({notifications:[{id:1,title:'fofac',body:'Пора повторять: '+n+' '+(n%10===1&&n%100!==11?'карточка':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'карточки':'карточек'),schedule:{at,allowWhileIdle:true}}]})
+}catch(e){}}
+/* ===== Мои карточки с интервальным повторением (SM-2, как в Anki) ===== */
+const DAY=864e5;
+let SRS={list:[],day:'',n:0,lim:20};
+try{const z=JSON.parse(localStorage.getItem('gq_srs2'));if(z&&Array.isArray(z.list))SRS={...SRS,...z}}catch(e){}
+const srsSave=()=>{try{localStorage.setItem('gq_srs2',JSON.stringify(SRS))}catch(e){}planNotif()};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today0=()=>{const d=new Date();d.setHours(0,0,0,0);return +d};
+function rollDay(){const k=new Date().toDateString();if(SRS.day!==k){SRS.day=k;SRS.n=0;srsSave()}}
+const fresh0=()=>({ef:2.5,iv:0,reps:0,lapses:0});
+function sched(c,r){
+c={...c};
+if(r===0){c.reps=0;c.iv=0;c.ls=0;c.lapses=(c.lapses||0)+1;c.ef=Math.max(1.3,c.ef-.2);c.due=Date.now()+6e4;return c}
+if(c.reps===0){/* новая карточка: Трудно 6 мин, Хорошо 2 дня, Легко 5 дней */
+if(r===1){c.iv=0;c.due=Date.now()+6*6e4;return c}
+c.ls=0;c.iv=r===2?2:5;if(r===3)c.ef+=.15;c.reps=1;c.due=today0()+c.iv*DAY;return c}
+if(r===1){c.iv=c.reps?Math.max(c.iv+1,Math.round(c.iv*1.2)):1;c.ef=Math.max(1.3,c.ef-.15)}
+else if(r===2){c.iv=c.reps===0?2:Math.max(c.iv+1,Math.round(c.iv*c.ef))}
+else{c.iv=c.reps===0?4:Math.max(c.iv+2,Math.round(c.iv*c.ef*1.3));c.ef+=.15}
+c.reps++;c.due=today0()+c.iv*DAY;return c}
+function fmtIv(c,r){const n=sched(c,r);if(!n.iv)return '<'+Math.max(1,Math.round((n.due-Date.now())/6e4))+' мин.';const d=n.iv;return d<30?d+' дн.':d<365?Math.round(d/30)+' мес.':(d/365).toFixed(1)+' г.'}
+function when(ts){const n=Date.now();if(ts<=n)return 'сейчас';if(ts<today0()+DAY){const m=Math.max(1,Math.round((ts-n)/6e4));return m<60?'через '+m+' мин':'сегодня'}const d=Math.floor((ts-today0())/DAY);return d===1?'завтра':'через '+d+' д'}
+function srsStats(){rollDay();const now=Date.now();let due=0,nw=0,learned=0;
+SRS.list.forEach(c=>{if(!c.st)nw++;else{if(c.st.due<=now)due++;if(c.st.iv>=21)learned++}});
+return{due,fresh:Math.min(nw,Math.max(0,SRS.lim-SRS.n)),total:SRS.list.length,learned}}
+function srsInfo(){const s=srsStats(),b=document.getElementById('srs');
+if(b)b.innerHTML=`Мои карточки<br><small style="font-weight:400;color:var(--mu)">Всего: ${s.total} · к повторению: ${s.due} · новых сегодня: ${s.fresh}</small>`}
+function arm(b,label,fn){let t;const o=b.textContent;
+b.onclick=()=>{if(b.classList.contains('arm')){clearTimeout(t);fn();return}
+b.classList.add('arm');b.textContent=label;t=setTimeout(()=>{b.classList.remove('arm');b.textContent=o},3000)}}
+
+function deckScreen(){
+document.onkeydown=null;const s=srsStats(),now=Date.now();
+const rows=SRS.list.map(c=>`<div class="row"><div class="tx">${esc(c.f.replace(/\s+/g,' '))}</div><small>${c.st?(c.st.due<=now?'сейчас':when(c.st.due)):'новая'}</small><button class="quit" data-e="${c.id}">✎</button><button class="quit" data-d="${c.id}">✕</button></div>`).join('');
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← На главную</button><span class="mn">Мои карточки: ${s.total} <button class="quit" id="mn" title="Модули" style="font-size:18px;line-height:1;padding:3px 12px">⋯</button></span></div>
+<div class="fb" style="margin:0 0 12px">К повторению: <b>${s.due}</b> · новых сегодня: <b>${s.fresh}</b> · выучено: <b>${s.learned}</b></div>
+<button class="big" id="st" style="margin-top:0"${s.due+s.fresh?'':' disabled'}>Учить (${s.due+s.fresh})</button>
+<div class="lv"><button id="add">Добавить</button><button id="rs"${s.total?'':' disabled'}>Заново</button></div>
+${rows?`<div style="max-height:42vh;overflow-y:auto">${rows}</div>`:'<div class="sub center">Пока пусто. Добавь первую карточку.</div>'}
+<div class="sub" style="margin:12px 0 0">Новых карточек в день: <input type="number" id="lim" min="1" max="500" value="${SRS.lim}" style="width:72px;padding:4px 8px"></div>`;
+document.getElementById('bk').onclick=home;
+document.getElementById('mn').onclick=modulesScreen;
+document.getElementById('st').onclick=srsStart;
+document.getElementById('add').onclick=()=>editScreen();
+arm(document.getElementById('rs'),'Сбросить прогресс?',()=>{SRS.list.forEach(c=>{delete c.st});SRS.n=0;srsSave();deckScreen()});
+document.getElementById('lim').onchange=e=>{SRS.lim=Math.max(1,Math.min(500,+e.target.value||20));srsSave();deckScreen()};
+box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>editScreen(b.dataset.e));
+box.querySelectorAll('[data-d]').forEach(b=>arm(b,'Точно?',()=>{SRS.list=SRS.list.filter(c=>c.id!==b.dataset.d);srsSave();deckScreen()}))}
+
+function editScreen(id,note){
+document.onkeydown=null;
+const c=id?SRS.list.find(x=>x.id===id):null;
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</button><span>${c?'Редактирование':'Новая карточка'}</span></div>
+<label class="lb" for="f">Лицевая сторона (вопрос / слово)</label><textarea id="f" rows="3"></textarea>
+<label class="lb" for="b">Оборот (ответ)</label><textarea id="b" rows="3"></textarea>
+<label class="lb" for="t">Заметка или пример (необязательно)</label><textarea id="t" rows="2"></textarea>
+<div class="sub" id="msg" style="margin:10px 0 0;min-height:18px">${note||''}</div>
+<button class="big" id="sv" style="margin-top:6px">Сохранить</button>
+${c?'':'<button class="big alt" id="sv2">Сохранить и добавить ещё</button>'}`;
+const F=document.getElementById('f'),B=document.getElementById('b'),T=document.getElementById('t');
+if(c){F.value=c.f;B.value=c.b;T.value=c.t||''}
+const save=more=>{const f=F.value.trim(),b=B.value.trim(),t=T.value.trim();
+if(!f||!b){document.getElementById('msg').textContent='⚠️ Заполни лицевую сторону и оборот.';return}
+if(c){c.f=f;c.b=b;c.t=t}else SRS.list.push({id:uid(),f,b,t});
+srsSave();more?editScreen(null,'✅ Карточка добавлена'):deckScreen()};
+document.getElementById('sv').onclick=()=>save(false);
+if(!c)document.getElementById('sv2').onclick=()=>save(true);
+document.getElementById('bk').onclick=deckScreen;
+F.focus()}
+
+function bulkScreen(note,text){
+document.onkeydown=null;
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</button><span>Добавить списком</span></div>
+<div class="sub" style="margin:0 0 8px">Одна карточка на строку: <b>вопрос | ответ | заметка</b> (заметка необязательна).</div>
+<textarea id="bt" rows="10" placeholder="I have lived here since 2020 | Present Perfect | since + момент начала&#10;a few | немного (исчисляемые) | a few friends"></textarea>
+<div class="sub" id="msg" style="margin:10px 0 0;min-height:18px">${note||''}</div>
+<button class="big" id="ad" style="margin-top:6px">Добавить</button>
+<button class="big alt" id="ex">Показать все мои карточки текстом (для копирования)</button>`;
+const bt=document.getElementById('bt');bt.value=text||'';
+document.getElementById('bk').onclick=deckScreen;
+document.getElementById('ad').onclick=()=>{
+let ok=0,dup=0;const bad=[];
+bt.value.split('\n').map(l=>l.trim()).filter(Boolean).forEach(l=>{
+const p=l.split(/\s*\|\s*|\t/).map(x=>x.trim());
+if(p.length<2||!p[0]||!p[1]){bad.push(l);return}
+if(SRS.list.some(x=>x.f===p[0]&&x.b===p[1])){dup++;return}
+SRS.list.push({id:uid(),f:p[0],b:p[1],t:p.slice(2).join(' | ')});ok++});
+srsSave();
+bulkScreen(`✅ Добавлено: ${ok}`+(dup?` · дубликатов пропущено: ${dup}`:'')+(bad.length?` · строк без «|» осталось для правки: ${bad.length}`:''),bad.join('\n'))};
+document.getElementById('ex').onclick=()=>{
+const cl=x=>String(x).replace(/\s*\n\s*/g,' ').replace(/\|/g,'/');
+bt.value=SRS.list.map(c=>[c.f,c.b,c.t].filter((x,i)=>i<2||x).map(cl).join(' | ')).join('\n')}}
+
+/* ===== Модули карточек (меню «⋯») ===== */
+const W1000=`the:определённый артикль;be:быть;to:к, чтобы;of:из, о;and:и;a:один, какой-то;in:в;that:тот, что;have:иметь;I:я;it:это, оно;for:для;not:не;on:на;with:с;he:он;as:как;you:ты, вы;do:делать;at:в, у;this:этот;but:но;his:его;by:у, от;from:из, от;they:они;we:мы;say:сказать;her:её;she:она;or:или;an:один;will:будет;my:мой;one:один;all:все;would:бы;there:там;their:их;what:что;so:так;up:вверх;out:вне, из;if:если;about:о, около;who:кто;get:получать;which:который;go:идти;me:меня, мне;when:когда;make:делать;can:мочь;like:нравиться, как;time:время;no:нет;just:просто;him:его, ему;know:знать;take:брать;people:люди;into:в;year:год;your:твой;good:хороший;some:некоторые;could:мог бы;them:их, им;see:видеть;other:другой;than:чем;then:тогда;now:сейчас;look:смотреть;only:только;come:приходить;its:его, её;over:над;think:думать;also:также;back:назад;after:после;use:использовать;two:два;how:как;our:наш;work:работа, работать;first:первый;well:хорошо;way:путь, способ;even:даже;new:новый;want:хотеть;because:потому что;any:любой;these:эти;give:давать;day:день;most:большинство;us:нас, нам;is:есть;are:есть (мн.);was:был;were:были;been:был (прич.);has:имеет;had:имел;did:делал;does:делает;said:сказал;made:сделал;went:пошёл;came:пришёл;took:взял;saw:увидел;knew:знал;got:получил;gave:дал;found:нашёл;thought:думал;told:сказал, рассказал;became:стал;left:ушёл, левый;put:класть;mean:значить;keep:держать, хранить;let:позволять;begin:начинать;seem:казаться;help:помогать;talk:говорить;turn:поворачивать;start:начинать;show:показывать;hear:слышать;play:играть;run:бегать;move:двигаться;live:жить;believe:верить;hold:держать;bring:приносить;happen:случаться;write:писать;provide:обеспечивать;sit:сидеть;stand:стоять;lose:терять;pay:платить;meet:встречать;include:включать;continue:продолжать;set:устанавливать;learn:учить;change:менять;lead:вести;understand:понимать;watch:смотреть, наблюдать;follow:следовать;stop:останавливать;create:создавать;speak:говорить;read:читать;allow:разрешать;add:добавлять;spend:тратить;grow:расти;open:открывать;walk:ходить;win:побеждать;offer:предлагать;remember:помнить;love:любить;consider:рассматривать;appear:появляться;buy:покупать;wait:ждать;serve:служить;die:умирать;send:отправлять;expect:ожидать;build:строить;stay:оставаться;fall:падать;cut:резать;reach:достигать;kill:убивать;remain:оставаться;suggest:предлагать;raise:поднимать;pass:проходить;sell:продавать;require:требовать;report:сообщать, отчёт;decide:решать;pull:тянуть;man:мужчина;woman:женщина;child:ребёнок;world:мир;life:жизнь;hand:рука;part:часть;place:место;case:случай;week:неделя;company:компания;system:система;program:программа;question:вопрос;government:правительство;number:число, номер;night:ночь;point:точка, пункт;home:дом;water:вода;room:комната;mother:мать;area:область, район;money:деньги;story:история;fact:факт;month:месяц;lot:множество;right:правильный, право;study:изучение;book:книга;eye:глаз;job:работа, должность;word:слово;business:бизнес;issue:вопрос, проблема;side:сторона;kind:вид, добрый;head:голова;house:дом;service:услуга;friend:друг;father:отец;power:сила, власть;hour:час;game:игра;line:линия;end:конец;member:член;law:закон;car:машина;city:город;community:сообщество;name:имя, название;president:президент;team:команда;minute:минута;idea:идея;kid:ребёнок;body:тело;information:информация;school:школа;parent:родитель;face:лицо;others:другие;level:уровень;office:офис;door:дверь;health:здоровье;person:человек;art:искусство;war:война;history:история;party:вечеринка, партия;result:результат;morning:утро;reason:причина;research:исследование;girl:девочка;guy:парень;moment:момент;air:воздух;teacher:учитель;force:сила;education:образование;foot:нога, ступня;boy:мальчик;age:возраст;policy:политика;music:музыка;market:рынок;sense:чувство, смысл;nation:нация;plan:план;college:колледж;interest:интерес;death:смерть;experience:опыт;effect:эффект;class:класс;control:контроль;care:забота;field:поле, область;development:развитие;role:роль;effort:усилие;rate:ставка, темп;heart:сердце;drug:лекарство;leader:лидер;light:свет, лёгкий;voice:голос;wife:жена;police:полиция;mind:разум;price:цена;decision:решение;son:сын;view:вид, взгляд;relationship:отношения;town:город;road:дорога;arm:рука;difference:разница;value:ценность;building:здание;action:действие;model:модель;season:сезон;society:общество;tax:налог;director:директор;position:позиция;player:игрок;record:запись, рекорд;paper:бумага, статья;space:пространство;ground:земля;form:форма;event:событие;official:официальный;matter:дело, иметь значение;center:центр;couple:пара;site:сайт, место;project:проект;activity:деятельность;star:звезда;table:стол;need:нуждаться;court:суд;oil:масло, нефть;situation:ситуация;cost:стоимость;industry:промышленность;figure:цифра, фигура;street:улица;image:изображение;phone:телефон;data:данные;picture:картина, фото;practice:практика;piece:кусок;land:земля;product:продукт;doctor:врач;wall:стена;patient:пациент;worker:работник;news:новости;test:тест;movie:фильм;north:север;support:поддержка;technology:технология;step:шаг;baby:малыш;computer:компьютер;type:тип;attention:внимание;film:фильм;tree:дерево;source:источник;organization:организация;hair:волосы;window:окно;culture:культура;peace:мир, покой;dog:собака;cat:кошка;food:еда;bed:кровать;river:река;sun:солнце;sea:море;rain:дождь;snow:снег;fire:огонь;color:цвет;small:маленький;large:большой;big:большой;long:длинный;great:великий, отличный;little:маленький;old:старый;young:молодой;high:высокий;different:разный;important:важный;public:общественный;bad:плохой;same:тот же;able:способный;free:свободный, бесплатный;real:настоящий;best:лучший;better:лучше;sure:уверенный;clear:ясный;hard:трудный, твёрдый;easy:лёгкий;late:поздний;early:ранний;strong:сильный;happy:счастливый;nice:приятный;fast:быстрый;slow:медленный;cold:холодный;hot:горячий;warm:тёплый;dark:тёмный;full:полный;empty:пустой;beautiful:красивый;possible:возможный;special:особый;whole:целый;black:чёрный;white:белый;red:красный;blue:синий;green:зелёный;yellow:жёлтый;never:никогда;always:всегда;often:часто;sometimes:иногда;usually:обычно;already:уже;still:всё ещё;again:снова;ever:когда-либо;today:сегодня;tomorrow:завтра;yesterday:вчера;here:здесь;where:где;why:почему;very:очень;too:слишком, тоже;much:много;many:много;more:больше;less:меньше;enough:достаточно;each:каждый;every:каждый;both:оба;few:мало;several:несколько;another:другой;between:между;through:через;during:во время;before:до, перед;under:под;without:без;within:в пределах;against:против;among:среди;around:вокруг;behind:позади;near:рядом;across:через;along:вдоль;until:до тех пор, пока;while:пока;though:хотя;since:с тех пор, так как;however:однако;together:вместе;away:прочь;off:выключено, от;down:вниз;next:следующий;last:последний;own:собственный;such:такой;should:следует;must:должен;might:мог бы;may:может;shall:должен, буду;ask:спрашивать;answer:ответ, отвечать;try:пытаться;call:звонить, звать;feel:чувствовать;leave:покидать;eat:есть, кушать;drink:пить;sleep:спать;wake:просыпаться;drive:водить;fly:летать;sing:петь;dance:танцевать;cook:готовить;clean:чистить, чистый;wear:носить (одежду);carry:нести;choose:выбирать;catch:ловить;throw:бросать;break:ломать;fix:чинить;forget:забывать;agree:соглашаться;travel:путешествовать;visit:посещать;prepare:готовить(ся);improve:улучшать;protect:защищать;develop:развивать;manage:управлять;save:сохранять, спасать;share:делиться;enjoy:наслаждаться;explain:объяснять;describe:описывать;finish:заканчивать;push:толкать;check:проверять;join:присоединяться;fill:наполнять;hope:надеяться;wish:желать;prove:доказывать;discuss:обсуждать;produce:производить;compare:сравнивать;perform:выполнять;achieve:достигать;solve:решать (задачу);hurry:спешить;invite:приглашать;wonder:удивляться;worry:волноваться;accept:принимать;accident:авария;actually:на самом деле;address:адрес;admit:признавать;adult:взрослый;advice:совет;afraid:испуганный;afternoon:день (после полудня);airport:аэропорт;alone:один, в одиночестве;amazing:удивительный;angry:сердитый;animal:животное;anyone:кто-нибудь;anything:что-нибудь;apartment:квартира;apple:яблоко;arrive:прибывать;article:статья;attack:атака;autumn:осень;available:доступный;bag:сумка;bank:банк;basic:основной;beach:пляж;beat:бить, побеждать;beauty:красота;bedroom:спальня;beer:пиво;belong:принадлежать;below:ниже;belt:ремень;bike:велосипед;bill:счёт;bird:птица;birth:рождение;birthday:день рождения;bit:кусочек;bite:кусать;blood:кровь;boat:лодка;bone:кость;border:граница;boring:скучный;borrow:занимать, брать взаймы;boss:начальник;bottle:бутылка;bottom:низ;bowl:миска;branch:ветка, филиал;bread:хлеб;breakfast:завтрак;breathe:дышать;bridge:мост;brother:брат;brown:коричневый;brush:щётка;burn:гореть;bus:автобус;busy:занятой;butter:масло (сливочное);button:кнопка;cake:торт;camera:камера;camp:лагерь;cancel:отменять;capital:столица;card:карта;career:карьера;carefully:осторожно;cash:наличные;castle:замок;cause:причина;century:век;certain:определённый;chair:стул;chance:шанс;character:персонаж, характер;charge:заряд, плата;cheap:дешёвый;cheese:сыр;chicken:курица;chocolate:шоколад;church:церковь;cinema:кинотеатр;circle:круг;citizen:гражданин;clock:часы;close:закрывать, близкий;clothes:одежда;cloud:облако;club:клуб;coast:побережье;coat:пальто;coffee:кофе;coin:монета;collect:собирать;comfortable:удобный;common:общий, обычный;complete:полный, завершать;condition:условие, состояние;connect:соединять;contain:содержать;conversation:разговор;copy:копия;corner:угол;correct:правильный;country:страна;course:курс;cover:покрывать;crazy:сумасшедший;cream:сливки, крем;credit:кредит;crime:преступление;cross:пересекать;crowd:толпа;cry:плакать, кричать;cup:чашка;current:текущий;customer:клиент;daily:ежедневный;damage:ущерб;danger:опасность;date:дата, свидание;daughter:дочь;dead:мёртвый;deal:сделка;dear:дорогой;debt:долг;deep:глубокий;degree:степень;delay:задержка;deliver:доставлять;depend:зависеть;design:дизайн;desk:письменный стол;destroy:разрушать;detail:деталь;dinner:ужин;direct:прямой;direction:направление;dirty:грязный;disease:болезнь;distance:расстояние;divide:делить;double:двойной;doubt:сомнение;draw:рисовать;dream:мечта, сон;dress:платье;drop:капля, ронять;dry:сухой;duty:долг, обязанность;ear:ухо;earth:земля, Земля;east:восток;economy:экономика;egg:яйцо;either:любой из двух;electric:электрический;else:ещё, другой;email:электронная почта;energy:энергия;engine:двигатель;enter:входить;environment:окружающая среда;escape:убегать;especially:особенно;evening:вечер;exactly:точно;example:пример;excellent:отличный;except:кроме;exercise:упражнение;exist:существовать;expensive:дорогой;express:выражать;extra:дополнительный;fail:терпеть неудачу;fair:справедливый;family:семья;famous:известный;farm:ферма;fashion:мода;fat:жирный;fear:страх;feed:кормить;female:женский;fence:забор;festival:фестиваль;fever:жар, лихорадка;fight:драться, бой;final:финальный;finger:палец;fish:рыба;flat:квартира, плоский;flight:полёт, рейс;floor:пол, этаж;flower:цветок;fog:туман;fool:дурак;forest:лес;fork:вилка;forward:вперёд;frame:рамка;fresh:свежий;fridge:холодильник;front:фронт, передняя часть;fruit:фрукт;fun:веселье;funny:смешной;future:будущее;garden:сад;gate:ворота;general:общий;gentle:мягкий;gift:подарок;glad:рад;glass:стекло, стакан;goal:цель;god:бог;gold:золото;grass:трава;grateful:благодарный;gray:серый;guess:догадываться;guest:гость;guide:гид;gun:оружие;habit:привычка;half:половина;hall:зал;hate:ненавидеть;headache:головная боль;heat:жара;heavy:тяжёлый;height:высота, рост;hello:привет;hide:прятать;hill:холм;hire:нанимать;hobby:хобби;holiday:праздник, отпуск;hole:дыра;honest:честный;horse:лошадь;hospital:больница;hotel:отель;huge:огромный;human:человек, человеческий;hungry:голодный;hunt:охотиться;hurt:причинять боль;husband:муж;ice:лёд;ill:больной;imagine:воображать;impossible:невозможный;increase:увеличивать;indeed:действительно;inside:внутри;instead:вместо;interesting:интересный;introduce:представлять;island:остров;item:предмет;jacket:куртка;jam:варенье, пробка;joke:шутка;journey:путешествие;judge:судья;juice:сок;jump:прыгать;key:ключ;kick:пинать;kiss:целовать;kitchen:кухня;knee:колено;knife:нож;knock:стучать;lack:нехватка;lady:дама;lake:озеро;lamp:лампа;language:язык;laugh:смеяться;lawyer:юрист;lazy:ленивый;leaf:лист;least:наименьший;leg:нога;lesson:урок;letter:письмо, буква;library:библиотека;lie:лгать, ложь;lift:поднимать;limit:предел;lip:губа;list:список;listen:слушать;local:местный;lock:замок;lonely:одинокий;loud:громкий;low:низкий;luck:удача;lunch:обед;machine:машина, станок;magazine:журнал;main:главный;male:мужской;map:карта;mark:отметка;marriage:брак;marry:жениться;match:матч, спичка;material:материал;maybe:возможно;meal:приём пищи;measure:измерять;meat:мясо;medicine:лекарство;memory:память;menu:меню;message:сообщение;metal:металл;middle:середина;mile:миля;milk:молоко;million:миллион;mirror:зеркало;miss:скучать, пропускать;mistake:ошибка;mix:смешивать;mobile:мобильный;modern:современный;moon:луна;mountain:гора;mouse:мышь;mouth:рот;nature:природа;neck:шея;neighbor:сосед;nervous:нервный;net:сеть;newspaper:газета;nobody:никто;noise:шум;normal:нормальный;nose:нос;note:заметка;notice:замечать;novel:роман;nurse:медсестра;object:предмет;obvious:очевидный;ocean:океан;officer:офицер;onion:лук;opinion:мнение;opportunity:возможность;orange:апельсин, оранжевый;order:заказ, порядок;ordinary:обычный;original:оригинальный;outside:снаружи;oven:духовка;owner:владелец;pack:упаковка;page:страница;pain:боль;paint:краска, красить;pair:пара;pants:брюки;park:парк;partner:партнёр;passport:паспорт;past:прошлое;path:тропа;pen:ручка;pencil:карандаш;pepper:перец;perfect:идеальный;period:период;permit:разрешать;pet:питомец;photo:фото;pick:выбирать, собирать;pilot:пилот;pink:розовый;pity:жалость;plane:самолёт;plant:растение;plastic:пластик;plate:тарелка;pleasant:приятный;please:пожалуйста;pocket:карман;poem:стихотворение;poor:бедный;popular:популярный;population:население;pork:свинина;post:почта, пост;pot:горшок, кастрюля;potato:картофель;pound:фунт;prefer:предпочитать;present:подарок, настоящее;pretty:симпатичный;prevent:предотвращать;prison:тюрьма;private:частный;prize:приз;probably:вероятно;problem:проблема;promise:обещание;pronounce:произносить;proud:гордый;pupil:ученик;purpose:цель;quality:качество;quarter:четверть;queen:королева;quick:быстрый;quiet:тихий;quite:довольно;radio:радио;rare:редкий;rather:скорее;ready:готовый;recent:недавний;recipe:рецепт;recognize:узнавать;region:регион;relax:расслабляться;religion:религия;repeat:повторять;reply:ответ;request:просьба;rest:отдых;restaurant:ресторан`.split(';').map(x=>{const i=x.indexOf(':');return[x.slice(0,i),x.slice(i+1)]});
+const MODS=[{id:'w1000',ico:'📚',name:'1000 самых популярных слов',desc:'Частотные английские слова с переводом. Добавляй пачками по 50 — они попадут в твою колоду.',words:W1000,pack:50}];
+function modulesScreen(){
+document.onkeydown=null;
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← К карточкам</button><span>Модули</span></div>
+${MODS.map(m=>`<div class="pk"><div class="tx"><b>${m.name}</b><br><small>${m.desc}</small></div><button class="quit" data-m="${m.id}">Открыть</button></div>`).join('')}`;
+document.getElementById('bk').onclick=deckScreen;
+box.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>moduleScreen(MODS.find(m=>m.id===b.dataset.m)))}
+function moduleScreen(m,note){
+document.onkeydown=null;
+const has=new Set(SRS.list.map(c=>c.f+'|'+c.b)),n=Math.ceil(m.words.length/m.pack);
+const packs=Array.from({length:n},(_,k)=>{const a=k*m.pack,w=m.words.slice(a,a+m.pack),d=w.filter(x=>has.has(x[0]+'|'+x[1])).length;return{a,w,d}});
+const tot=packs.reduce((t,p)=>t+p.d,0);
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Модули</button><span>${m.ico} ${m.name}</span></div>
+<div class="fb" style="margin:0 0 12px">В модуле слов: <b>${m.words.length}</b> · в твоей колоде: <b>${tot}</b><br><small style="color:var(--mu)">Лицевая сторона — слово, оборот — перевод.</small></div>
+<div class="sub" id="msg" style="min-height:18px;margin:0 0 8px">${note||''}</div>
+<button class="big" id="all" style="margin-top:0"${tot===m.words.length?' disabled':''}>Добавить все (${m.words.length-tot})</button>
+${tot?`<button class="big alt" id="rm" style="margin-top:10px">🗑 Удалить добавленные из модуля (${tot})</button>`:''}
+<div style="max-height:46vh;overflow-y:auto;margin-top:12px">${packs.map((p,k)=>`<div class="pk"><div class="tx">${p.a+1}–${p.a+p.w.length}<br><small>${esc(p.w.slice(0,4).map(x=>x[0]).join(', '))}…</small></div>${p.d===p.w.length?'':`<button class="quit" data-p="${k}">＋ Добавить${p.d?' ('+(p.w.length-p.d)+')':''}</button>`}${p.d?`<button class="quit rd" data-x="${k}">Удалить</button>`:''}</div>`).join('')}</div>`;
+const add=ws=>{const h=new Set(SRS.list.map(c=>c.f+'|'+c.b));let ok=0;
+ws.forEach(x=>{if(!h.has(x[0]+'|'+x[1])){SRS.list.push({id:uid(),f:x[0],b:x[1],t:''});ok++}});
+srsSave();moduleScreen(m,'✅ Добавлено карточек: '+ok)};
+document.getElementById('bk').onclick=modulesScreen;
+const rm=document.getElementById('rm');
+if(rm)arm(rm,'Точно удалить? Нажми ещё раз',()=>{const k=new Set(m.words.map(x=>x[0]+'|'+x[1]));
+const before=SRS.list.length;SRS.list=SRS.list.filter(c=>!k.has(c.f+'|'+c.b));srsSave();
+moduleScreen(m,'🗑 Удалено карточек: '+(before-SRS.list.length))});
+document.getElementById('all').onclick=()=>add(m.words);
+box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>add(packs[+b.dataset.p].w));
+box.querySelectorAll('[data-x]').forEach(b=>arm(b,'Вы уверены?',()=>{const pk=packs[+b.dataset.x],k=new Set(pk.w.map(x=>x[0]+'|'+x[1])),n0=SRS.list.length;
+SRS.list=SRS.list.filter(c=>!k.has(c.f+'|'+c.b));srsSave();moduleScreen(m,'🗑 Удалено карточек: '+(n0-SRS.list.length))}))}
+
+let queue=[],reviewed=0;
+function srsStart(){
+rollDay();const now=Date.now();
+const due=SRS.list.filter(c=>c.st&&c.st.due<=now).sort((a,b)=>a.st.due-b.st.due);
+const nw=SRS.list.filter(c=>!c.st).slice(0,Math.max(0,SRS.lim-SRS.n));
+queue=[...due,...nw];reviewed=0;srsCard(false)}
+function srsCard(back){
+document.onkeydown=null;
+if(!queue.length)return srsEnd();
+const x=queue[0],c=x.st||fresh0();
+const nNew=queue.filter(y=>!y.st).length,nRep=queue.length-nNew;
+box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</button><span>Новых ${nNew} · повторов ${nRep}</span></div>
+<div class="fc${back?' open':''}" id="fc"><div class="fq">${esc(x.f)}</div>${back?`<div class="fa">${esc(x.b)}</div>${x.t?`<div class="ft">${esc(x.t)}</div>`:''}`:'<div class="fh">Нажми на карточку, чтобы увидеть ответ</div>'}</div>
+${back?`<div class="rt">${['Снова','Трудно','Хорошо','Легко'].map((l,r)=>`<div><small>${fmtIv(c,r)}</small><button class="r${r}" data-r="${r}">${l}</button></div>`).join('')}</div>`
+:`<button class="big" id="sh">Показать ответ</button>`}`;
+document.getElementById('bk').onclick=deckScreen;
+if(back)box.querySelectorAll('.rt button').forEach(b=>b.onclick=()=>srsRate(+b.dataset.r));
+else document.getElementById('sh').onclick=document.getElementById('fc').onclick=()=>srsCard(true);
+document.onkeydown=e=>{
+if(!back&&(e.key===' '||e.key==='Enter')){e.preventDefault();srsCard(true)}
+else if(back&&/^[1-4]$/.test(e.key))srsRate(+e.key-1)
+else if(back&&e.key===' '){e.preventDefault();srsRate(2)}}}
+function srsRate(r){
+const x=queue.shift(),isNew=!x.st;
+x.st=sched(x.st||fresh0(),r);
+if(isNew)SRS.n++;
+srsSave();reviewed++;
+if(r===0)queue.splice(Math.min(3,queue.length),0,x);
+srsCard(false)}
+function srsEnd(){
+document.onkeydown=null;
+const st=srsStats(),now=Date.now();
+const nxt=SRS.list.filter(c=>c.st&&c.st.due>now).map(c=>c.st.due).sort((a,b)=>a-b)[0];
+box.innerHTML=`<div class="center"><h2 style="margin:6px 0;font-size:28px">${reviewed?'На сегодня всё!':'Пока нечего повторять'}</h2><div class="sub">Повторено карточек: ${reviewed}</div></div>
+<div class="fb">В колоде: <b>${st.total}</b> · выучено (интервал ≥ 21 дня): <b>${st.learned}</b>${nxt?`<br>Следующее повторение: <b>${when(nxt)}</b>`:''}${st.total&&!st.fresh&&SRS.list.some(c=>!c.st)?`<br>Лимит новых карточек на сегодня (${SRS.lim}) исчерпан.`:''}</div>
+<button class="big" id="hm">К моим карточкам</button>`;
+document.getElementById('hm').onclick=deckScreen}
+
+planNotif();home();
+</script></body></html>
