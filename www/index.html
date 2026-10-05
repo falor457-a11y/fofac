@@ -588,15 +588,9 @@ ${topics.length?`<div class="fb"><b>Повтори темы:</b> ${topics.join('
 <button class="big" id="again">Играть ещё</button>`;
 document.getElementById('again').onclick=home}
 /* ===== Уведомления (нативные, работают только в установленном приложении) ===== */
-let npBusy=false,npAgain=false;
 async function planNotif(){
-if(npBusy){npAgain=true;return}
-npBusy=true;
-try{await planNotif0()}catch(e){}
-npBusy=false;
-if(npAgain){npAgain=false;planNotif()}}
-async function planNotif0(){
 const P=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications;if(!P)return;
+try{
 let p=await P.checkPermissions();
 if(p.display==='prompt'||p.display==='prompt-with-rationale')p=await P.requestPermissions();
 if(p.display!=='granted')return;
@@ -605,10 +599,10 @@ const dues=SRS.list.filter(c=>c.st).map(c=>c.st.due).sort((a,b)=>a-b);if(!dues.l
 const now=Date.now(),L=[];
 const txt=n=>'Пора повторять: '+n+' '+(n%10===1&&n%100!==11?'карточка':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'карточки':'карточек');
 const add=at=>{const n=dues.filter(d=>d<=+at).length;if(n&&+at>now+5e3&&!L.some(x=>+x.schedule.at===+at))L.push({id:L.length+1,title:'fofac',body:txt(n),schedule:{at}})};
-/* уведомление ровно в момент истечения КАЖДОГО таймера (Трудно / Хорошо / Легко); на «Снова» уведомления нет */
-const tm=SRS.list.filter(c=>c.st&&!c.st.ag&&c.st.due>now+5e3).map(c=>c.st.due).sort((a,b)=>a-b);
-for(let i=0;i<tm.length&&L.length<60;i++){let j=i;while(j+1<tm.length&&tm[j+1]-tm[j]<3e4)j++;add(new Date(tm[j]));i=j}
-if(L.length)await P.schedule({notifications:L})}
+if(dues[0]>now+6e4&&dues[0]<now+72e5)add(new Date(dues[0]));
+for(let k=0;k<8;k++){const d=new Date();d.setDate(d.getDate()+k);d.setHours(10,0,0,0);add(d)}
+if(L.length)await P.schedule({notifications:L})
+}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)planNotif()});
 /* ===== Мои карточки с интервальным повторением (SM-2, как в Anki) ===== */
 const DAY=864e5;
@@ -621,15 +615,15 @@ const today0=()=>{const d=new Date();d.setHours(0,0,0,0);return +d};
 function rollDay(){const k=new Date().toDateString();if(SRS.day!==k){SRS.day=k;SRS.n=0;srsSave()}}
 const fresh0=()=>({ef:2.5,iv:0,reps:0,lapses:0});
 function sched(c,r){
-c={...c};c.ag=0;
-if(r===0){c.ag=1;c.reps=0;c.iv=0;c.ls=0;c.lapses=(c.lapses||0)+1;c.ef=Math.max(1.3,c.ef-.2);c.due=Date.now()+6e4;return c}
-if(c.reps===0){/* новая карточка: Трудно 10 мин, Хорошо 1 день, Легко 5 дней */
-if(r===1){c.iv=0;c.due=Date.now()+10*6e4;return c}
-c.ls=0;c.iv=r===2?1:5;if(r===3)c.ef+=.15;c.reps=1;c.due=Date.now()+c.iv*DAY;return c}
+c={...c};
+if(r===0){c.reps=0;c.iv=0;c.ls=0;c.lapses=(c.lapses||0)+1;c.ef=Math.max(1.3,c.ef-.2);c.due=Date.now()+6e4;return c}
+if(c.reps===0){/* новая карточка: Трудно 6 мин, Хорошо 2 дня, Легко 5 дней */
+if(r===1){c.iv=0;c.due=Date.now()+6*6e4;return c}
+c.ls=0;c.iv=r===2?2:5;if(r===3)c.ef+=.15;c.reps=1;c.due=today0()+c.iv*DAY;return c}
 if(r===1){c.iv=c.reps?Math.max(c.iv+1,Math.round(c.iv*1.2)):1;c.ef=Math.max(1.3,c.ef-.15)}
 else if(r===2){c.iv=c.reps===0?2:Math.max(c.iv+1,Math.round(c.iv*c.ef))}
 else{c.iv=c.reps===0?4:Math.max(c.iv+2,Math.round(c.iv*c.ef*1.3));c.ef+=.15}
-c.reps++;c.due=Date.now()+c.iv*DAY;return c}
+c.reps++;c.due=today0()+c.iv*DAY;return c}
 function fmtIv(c,r){const n=sched(c,r);if(!n.iv)return '<'+Math.max(1,Math.round((n.due-Date.now())/6e4))+' мин.';const d=n.iv;return d<30?d+' дн.':d<365?Math.round(d/30)+' мес.':(d/365).toFixed(1)+' г.'}
 function when(ts){const n=Date.now();if(ts<=n)return 'сейчас';if(ts<today0()+DAY){const m=Math.max(1,Math.round((ts-n)/6e4));return m<60?'через '+m+' мин':'сегодня'}const d=Math.floor((ts-today0())/DAY);return d===1?'завтра':'через '+d+' д'}
 function srsStats(){rollDay();const now=Date.now();let due=0,nw=0,learned=0;
@@ -641,20 +635,11 @@ function arm(b,label,fn){let t;const o=b.textContent;
 b.onclick=()=>{if(b.classList.contains('arm')){clearTimeout(t);fn();return}
 b.classList.add('arm');b.textContent=label;t=setTimeout(()=>{b.classList.remove('arm');b.textContent=o},3000)}}
 
-let dkT=0;
-/* живое обновление списка: подписи «через N мин», счётчик и кнопка «Учить» */
-function dkTick(){
-const st=document.getElementById('st'),bar=document.getElementById('dkst');
-if(!st||!bar){clearInterval(dkT);return}
-const s=srsStats(),now=Date.now();
-box.querySelectorAll('small[data-due]').forEach(e=>{const t=+e.dataset.due;if(t)e.textContent=t<=now?'сейчас':when(t)});
-bar.innerHTML=`К повторению: <b>${s.due}</b> · новых сегодня: <b>${s.fresh}</b> · выучено: <b>${s.learned}</b>`;
-st.textContent='Учить ('+(s.due+s.fresh)+')';st.disabled=!(s.due+s.fresh)}
 function deckScreen(){
 document.onkeydown=null;const s=srsStats(),now=Date.now();
-const rows=SRS.list.map(c=>`<div class="row"><div class="tx">${esc(c.f.replace(/\s+/g,' '))}</div><small data-due="${c.st?c.st.due:''}">${c.st?(c.st.due<=now?'сейчас':when(c.st.due)):'новая'}</small><button class="quit" data-e="${c.id}">✎</button><button class="quit" data-d="${c.id}">✕</button></div>`).join('');
+const rows=SRS.list.map(c=>`<div class="row"><div class="tx">${esc(c.f.replace(/\s+/g,' '))}</div><small>${c.st?(c.st.due<=now?'сейчас':when(c.st.due)):'новая'}</small><button class="quit" data-e="${c.id}">✎</button><button class="quit" data-d="${c.id}">✕</button></div>`).join('');
 box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← На главную</button><span class="mn">Мои карточки: ${s.total} <button class="quit" id="mn" title="Модули" style="font-size:18px;line-height:1;padding:3px 12px">⋯</button></span></div>
-<div class="fb" id="dkst" style="margin:0 0 12px">К повторению: <b>${s.due}</b> · новых сегодня: <b>${s.fresh}</b> · выучено: <b>${s.learned}</b></div>
+<div class="fb" style="margin:0 0 12px">К повторению: <b>${s.due}</b> · новых сегодня: <b>${s.fresh}</b> · выучено: <b>${s.learned}</b></div>
 <button class="big" id="st" style="margin-top:0"${s.due+s.fresh?'':' disabled'}>Учить (${s.due+s.fresh})</button>
 <div class="lv"><button id="add">Добавить</button><button id="rs"${s.total?'':' disabled'}>Заново</button></div>
 ${rows?`<div style="max-height:42vh;overflow-y:auto">${rows}</div>`:'<div class="sub center">Пока пусто. Добавь первую карточку.</div>'}
@@ -666,8 +651,7 @@ document.getElementById('add').onclick=()=>editScreen();
 arm(document.getElementById('rs'),'Сбросить прогресс?',()=>{SRS.list.forEach(c=>{delete c.st});SRS.n=0;srsSave();deckScreen()});
 document.getElementById('lim').onchange=e=>{SRS.lim=Math.max(1,Math.min(500,+e.target.value||20));srsSave();deckScreen()};
 box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>editScreen(b.dataset.e));
-box.querySelectorAll('[data-d]').forEach(b=>arm(b,'Точно?',()=>{SRS.list=SRS.list.filter(c=>c.id!==b.dataset.d);srsSave();deckScreen()}));
-clearInterval(dkT);dkT=setInterval(dkTick,5000)}
+box.querySelectorAll('[data-d]').forEach(b=>arm(b,'Точно?',()=>{SRS.list=SRS.list.filter(c=>c.id!==b.dataset.d);srsSave();deckScreen()}))}
 
 function editScreen(id,note){
 document.onkeydown=null;
@@ -746,7 +730,7 @@ box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>add(packs[+b.dataset.p
 box.querySelectorAll('[data-x]').forEach(b=>arm(b,'Вы уверены?',()=>{const pk=packs[+b.dataset.x],k=new Set(pk.w.map(x=>x[0]+'|'+x[1])),n0=SRS.list.length;
 SRS.list=SRS.list.filter(c=>!k.has(c.f+'|'+c.b));srsSave();moduleScreen(m,'🗑 Удалено карточек: '+(n0-SRS.list.length))}))}
 
-let queue=[],reviewed=0,nxT=0;
+let queue=[],reviewed=0;
 function srsStart(){
 rollDay();const now=Date.now();
 const due=SRS.list.filter(c=>c.st&&c.st.due<=now).sort((a,b)=>a.st.due-b.st.due);
@@ -779,14 +763,10 @@ function srsEnd(){
 document.onkeydown=null;
 const st=srsStats(),now=Date.now();
 const nxt=SRS.list.filter(c=>c.st&&c.st.due>now).map(c=>c.st.due).sort((a,b)=>a-b)[0];
-box.innerHTML=`<div class="center"><h2 style="margin:6px 0;font-size:28px">${st.due?'Пора повторять':reviewed?'На сегодня всё!':'Пока нечего повторять'}</h2><div class="sub">Повторено карточек: ${reviewed}</div></div>
-<div class="fb">В колоде: <b>${st.total}</b> · выучено (интервал ≥ 21 дня): <b>${st.learned}</b>${nxt?`<br>Следующее повторение: <b id="srsnx">${when(nxt)}</b>`:''}${st.total&&!st.fresh&&SRS.list.some(c=>!c.st)?`<br>Лимит новых карточек на сегодня (${SRS.lim}) исчерпан.`:''}</div>
-${st.due?`<button class="big" id="srsgo">Учить (${st.due})</button>`:''}
-<button class="big${st.due?' alt':''}" id="hm">К моим карточкам</button>`;
-document.getElementById('hm').onclick=deckScreen;
-const go=document.getElementById('srsgo');if(go)go.onclick=srsStart;
-clearInterval(nxT);
-if(nxt)nxT=setInterval(()=>{const e=document.getElementById('srsnx');if(!e){clearInterval(nxT);return}if(Date.now()>=nxt){clearInterval(nxT);srsEnd()}else e.textContent=when(nxt)},10000)}
+box.innerHTML=`<div class="center"><h2 style="margin:6px 0;font-size:28px">${reviewed?'На сегодня всё!':'Пока нечего повторять'}</h2><div class="sub">Повторено карточек: ${reviewed}</div></div>
+<div class="fb">В колоде: <b>${st.total}</b> · выучено (интервал ≥ 21 дня): <b>${st.learned}</b>${nxt?`<br>Следующее повторение: <b>${when(nxt)}</b>`:''}${st.total&&!st.fresh&&SRS.list.some(c=>!c.st)?`<br>Лимит новых карточек на сегодня (${SRS.lim}) исчерпан.`:''}</div>
+<button class="big" id="hm">К моим карточкам</button>`;
+document.getElementById('hm').onclick=deckScreen}
 
 try{const t=localStorage.getItem("gq_theme");if(t)applyTheme(t)}catch(e){}
 planNotif();buildSB();watchBox();home();
