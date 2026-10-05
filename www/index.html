@@ -4,11 +4,14 @@
 <title>fofac</title>
 <style>
 :root{--bg:#e8ebf2;--card:#fff;--tx:#12151c;--mu:#6b7385;--ac:#3050ff;--acs:#e3e8ff;--ok:#16895a;--oks:#dcf2e8;--no:#d63c48;--nos:#fbe3e5;--am:#a86400;--ams:#fdefd3;--bd:#d3d8e5;--sh:0 1px 2px rgba(18,21,28,.05),0 14px 30px -14px rgba(30,45,110,.28);--serif:ui-serif,"New York",Georgia,"Times New Roman",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d13;--card:#151926;--tx:#eef0f6;--mu:#8f98ad;--ac:#8497ff;--acs:#1e2547;--ok:#4fc994;--oks:#12332a;--no:#ff7a84;--nos:#3a1c21;--am:#e8a83a;--ams:#3a2c10;--bd:#262c3d;--sh:none}}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){--bg:#0b0d13;--card:#151926;--tx:#eef0f6;--mu:#8f98ad;--ac:#8497ff;--acs:#1e2547;--ok:#4fc994;--oks:#12332a;--no:#ff7a84;--nos:#3a1c21;--am:#e8a83a;--ams:#3a2c10;--bd:#262c3d;--sh:none}}
 :root[data-theme="dark"]{--bg:#0b0d13;--card:#151926;--tx:#eef0f6;--mu:#8f98ad;--ac:#8497ff;--acs:#1e2547;--ok:#4fc994;--oks:#12332a;--no:#ff7a84;--nos:#3a1c21;--am:#e8a83a;--ams:#3a2c10;--bd:#262c3d;--sh:none}
+:root[data-theme="pink"]{--bg:#fbe9ef;--card:#fff;--tx:#2b1520;--mu:#8a6676;--ac:#e0457b;--acs:#fde1ec;--ok:#16895a;--oks:#dcf2e8;--no:#c2262f;--nos:#fbe0e2;--am:#a86400;--ams:#fdefd3;--bd:#f0cad8;--sh:0 1px 2px rgba(120,30,70,.06),0 14px 30px -14px rgba(200,60,110,.4)}
+:root[data-theme="glass"]{--bg:linear-gradient(160deg,#d6e4ff 0%,#eef1fb 45%,#e3d8ff 100%);--card:rgba(255,255,255,.55);--tx:#1a2140;--mu:#5d6a90;--ac:#3a5bff;--acs:rgba(90,120,255,.16);--ok:#16895a;--oks:rgba(22,137,90,.16);--no:#d63c48;--nos:rgba(214,60,72,.14);--am:#a86400;--ams:rgba(168,100,0,.14);--bd:rgba(100,125,200,.25);--sh:0 10px 30px -12px rgba(60,80,170,.35),inset 0 1px 0 rgba(255,255,255,.85)}
+:root[data-theme="glass"] :is(button,.q,.fb,.fc,.row,.pk,.sent,.tp,.mc,#sb,#hb,textarea,input){-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,Roboto,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;display:flex;justify-content:center;padding:28px 16px 40px}
+body{margin:0;min-height:100vh;background:var(--bg);background-attachment:fixed;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,Roboto,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;display:flex;justify-content:center;padding:28px 16px 40px}
 .app{width:100%;max-width:460px}
 h1{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
 h2{font-family:var(--serif)}
@@ -80,12 +83,86 @@ textarea:focus,input:focus{outline:none;border-color:var(--ac)}
 .sent button:disabled{text-decoration:none}
 .sent button.ok{background:var(--oks);color:var(--ok)}
 .sent button.no{background:var(--nos);color:var(--no)}
+details.tn{background:var(--card);border-radius:16px;box-shadow:var(--sh);margin-top:12px;text-align:left}
+details.tn>summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.tn>summary::-webkit-details-marker{display:none}
+details.tn>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--mu);border-bottom:2px solid var(--mu);transform:rotate(45deg);transition:transform .2s;margin-right:4px;flex:none}
+details.tn[open]>summary::after{transform:rotate(-135deg)}
+details.tn small{display:block;font-weight:400;color:var(--mu);font-size:13px;margin-top:2px}
+details.tn details.tn{background:var(--bg);box-shadow:none;margin:10px 0 0}
+.tb{padding:0 16px 16px;font-size:15px;line-height:1.55}
+.tb h4{margin:16px 0 6px;font-size:13px;color:var(--mu);font-weight:600}
+.fl{background:var(--acs);border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:4px}
+.ex{margin:6px 0}.ex span{display:block;color:var(--mu);font-size:14px}
+.pr{margin-top:14px;padding:13px;width:100%;text-align:center;background:var(--ac);color:#fff;font-weight:600;border-radius:14px}
+.pr:hover:not(:disabled){border-color:transparent;filter:brightness(1.08)}
+#hb{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;width:44px;height:44px;border-radius:14px;background:var(--card);box-shadow:var(--sh);border:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0;z-index:40;cursor:pointer}
+#hb i{display:block;width:20px;height:2px;border-radius:2px;background:var(--tx)}
+#sb{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:84vw;background:var(--card);box-shadow:var(--sh);transform:translateX(-100%);transition:transform .22s,width .22s;z-index:30;padding:calc(env(safe-area-inset-top,0px) + 68px) 12px 16px;overflow-y:auto;overflow-x:hidden;box-sizing:border-box;display:flex;flex-direction:column;gap:4px}
+#sb.open{transform:none}
+#sbk{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,12,20,.4);z-index:25;display:none}
+#sbk.on{display:block}
+.si{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:transparent;border:none;box-shadow:none;width:100%;text-align:left;font-size:16px;font-weight:600;cursor:pointer}
+.si:hover:not(:disabled){background:var(--acs);border-color:transparent}
+.si b{width:30px;flex:none;text-align:center;color:var(--ac);font-size:15px}
+.si span{flex:1}
+.sg{display:none;padding:0 0 6px 18px}
+.sg.show{display:block}
+.sg .si{font-weight:500;font-size:15px;padding:10px 12px}
+.sgh{font-size:13px;color:var(--mu);padding:8px 12px 2px}
+.app{padding-top:52px}
+.tp{background:var(--card);border-radius:24px;padding:22px 20px;box-shadow:var(--sh)}
+@media(min-width:760px){
+#sb{transform:none;width:64px;padding-left:8px;padding-right:8px;overflow:hidden}
+#sb.open{width:280px}
+#sb .si span{display:none}
+#sb.open .si span{display:block}
+#sb:not(.open) .sg{display:none!important}
+#sbk{display:none!important}
+.app{padding-top:0}
+}
+.si svg{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.si.on{background:var(--acs);color:var(--ac)}
+.sbl{display:flex;align-items:center;gap:8px;position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);left:64px;height:44px;font-family:var(--serif);font-weight:700;font-size:20px;color:var(--tx)}
+.sbl svg{width:24px;height:24px;fill:var(--ac);stroke:var(--ac);stroke-width:1.6;stroke-linejoin:round}
+.sf{margin-top:auto}
+#srs{display:flex;align-items:center;gap:14px;text-align:left;padding:16px 18px}
+#srs .ci{width:44px;height:44px;border-radius:14px;background:var(--acs);color:var(--ac);display:flex;align-items:center;justify-content:center;flex:none}
+#srs svg,.stl svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#srs .ct{flex:1}#srs .ct b{display:block;font-size:16px}#srs .ct small{display:block;color:var(--mu);font-size:13px;margin-top:3px}
+#srs .chv{color:var(--mu);flex:none}#srs .chv svg{width:20px;height:20px}
+.stg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.stl{background:var(--bg);border:1px solid var(--bd);border-radius:16px;padding:14px}
+.stl b{display:block;font-family:var(--serif);font-size:30px;color:var(--ac);line-height:1.1}
+.stl span{color:var(--mu);font-size:13px}
+.md{position:fixed;top:0;left:0;right:0;bottom:0;display:none;align-items:center;justify-content:center;background:rgba(10,12,20,.45);z-index:60;padding:20px}
+.md.on{display:flex}
+.mc{background:var(--card);border-radius:24px;padding:22px;width:100%;max-width:360px;box-shadow:0 20px 60px -10px rgba(0,0,0,.4)}
+.mc h3{font-family:var(--serif);font-size:22px;margin:0 0 14px}
+.thg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.th{display:flex;flex-direction:column;gap:8px;align-items:stretch;padding:10px;border-radius:16px;border:2px solid var(--bd);font-size:15px;font-weight:600;background:transparent;text-align:center}
+.th i{display:block;height:46px;border-radius:10px;border:1px solid var(--bd)}
+.th.sel{border-color:var(--ac)}
+@media(min-width:760px){#sb:not(.open) .sbl{display:none}}
+
+.sg .sgb{padding:9px 12px;font-weight:600;font-size:15px}
+.sgb small{display:block;font-weight:400;color:var(--mu);font-size:12px}
+.sgb .cv{width:8px;height:8px;border-right:2px solid var(--mu);border-bottom:2px solid var(--mu);transform:rotate(-45deg);transition:transform .2s;flex:none;margin-right:4px}
+.sgb.op .cv{transform:rotate(45deg)}
+.sgl{display:none;padding-left:10px}.sgl.show{display:block}
+.tw{cursor:pointer;border-radius:4px}
+.tw:active{background:var(--acs)}
+#bub{position:fixed;z-index:80;display:none;max-width:240px;background:#1c2233;color:#fff;padding:8px 12px;border-radius:12px;font:500 14px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#bub::after{content:"";position:absolute;left:var(--ax,50%);margin-left:-6px;border:6px solid transparent}
+#bub.up::after{top:100%;border-top-color:#1c2233}
+#bub.dn::after{bottom:100%;border-bottom-color:#1c2233}
 </style></head><body>
 <div class="app">
 <h1>fofac</h1>
 <div class="sub">Тренажёр грамматики: A2 → B2</div>
 <div class="card" id="box"></div>
 </div>
+<button id="hb" aria-label="Меню"><i></i><i></i><i></i></button><div id="sbk"></div><nav id="sb"></nav>
 <script>
 // [sentence with ___, options, correct index, topic, explanation(ru), translation(ru), level 1|2|3]
 const Q=[
@@ -246,8 +323,214 @@ const sh=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.r
 function upd(){
 document.getElementById('hp').innerHTML=dots();
 document.getElementById('sc').textContent='Очки '+score+(streak>1?' · серия '+streak:'')}
+
+const TENSES=[{g:'Present',sub:'Настоящее',items:[
+{id:'ps',n:'Present Simple',ru:'Настоящее простое',topic:'Present Simple',
+use:'Привычки и регулярные действия, факты, расписания.',
+f:['+ I/you/we/they + <b>V</b> · he/she/it + <b>V-s/es</b>','− <b>do not (don\'t) / does not (doesn\'t)</b> + V','? <b>Do / Does</b> + подлежащее + V?'],
+mk:'always, usually, often, sometimes, never, every day, on Mondays',
+ex:[['She works in an office.','Она работает в офисе.'],['I don\'t drink coffee.','Я не пью кофе.'],['Does he speak English?','Он говорит по-английски?']],
+tip:'После does глагол без -s: Does he <b>work</b>, а не works.'},
+{id:'pc',n:'Present Continuous',ru:'Настоящее длительное',topic:'Present Continuous',
+use:'Действие происходит прямо сейчас или временно; запланированное ближайшее будущее.',
+f:['+ <b>am / is / are</b> + V-ing','− am / is / are <b>not</b> + V-ing','? <b>Am / Is / Are</b> + подлежащее + V-ing?'],
+mk:'now, right now, at the moment, today, currently, Look!, Listen!',
+ex:[['I\'m working now.','Я сейчас работаю.'],['They aren\'t sleeping.','Они не спят.'],['Is she studying?','Она сейчас учится?']],
+tip:'Глаголы состояния (know, like, want, need, understand) обычно не ставят в Continuous: I know, а не I\'m knowing.'},
+{id:'pp',n:'Present Perfect',ru:'Настоящее совершённое',topic:'Present Perfect',
+use:'Результат в настоящем, жизненный опыт, действие, которое началось в прошлом и продолжается (for / since).',
+f:['+ <b>have / has</b> + V3 (причастие)','− have / has <b>not</b> (haven\'t / hasn\'t) + V3','? <b>Have / Has</b> + подлежащее + V3?'],
+mk:'already, yet, just, ever, never, for, since, recently, so far, this week',
+ex:[['I have finished the report.','Я закончил отчёт (он готов).'],['She has lived here for five years.','Она живёт здесь пять лет.'],['Have you ever been to Paris?','Ты когда-нибудь бывал в Париже?']],
+tip:'С точным временем в прошлом (yesterday, in 2020, last week) нужен Past Simple, а не Present Perfect. For — период, since — точка начала.'},
+{id:'pcn',n:'Present Perfect Continuous',ru:'Настоящее совершённое длительное',topic:'',
+use:'Действие началось в прошлом и длится до сих пор (важен процесс), либо только что закончилось и результат виден.',
+f:['+ <b>have / has been</b> + V-ing','− have / has <b>not been</b> + V-ing','? <b>Have / Has</b> + подлежащее + <b>been</b> + V-ing?'],
+mk:'for, since, all day, lately, recently, how long',
+ex:[['I have been studying English for two years.','Я учу английский уже два года.'],['She has been waiting since 9 o\'clock.','Она ждёт с девяти часов.'],['How long have you been working here?','Как давно ты здесь работаешь?']],
+tip:'Perfect — про результат («я написал три письма»), Perfect Continuous — про процесс («я писал письма весь день»).'}
+]},
+{g:'Past',sub:'Прошедшее',items:[
+{id:'a1',n:'Past Simple',ru:'Простое прошедшее',topic:'Past Simple',
+use:'Законченное действие в прошлом, последовательность событий.',
+f:['+ <b>V2</b> (-ed или неправильная форма)','− <b>did not (didn\'t)</b> + V','? <b>Did</b> + подлежащее + V?'],
+mk:'yesterday, last week, ago, in 2020, when',
+ex:[['She finished the report yesterday.','Она закончила отчёт вчера.'],['I didn\'t see him.','Я его не видел.'],['Did you call her?','Ты ей звонил?']],
+tip:'После did глагол в начальной форме: Did she <b>go</b>, а не went. У неправильных глаголов своя форма: go → went.'},
+{id:'a2',n:'Past Continuous',ru:'Прошедшее длительное',topic:'',
+use:'Процесс в определённый момент в прошлом или действие, которое прервали.',
+f:['+ <b>was / were</b> + V-ing','− was / were <b>not</b> + V-ing','? <b>Was / Were</b> + подлежащее + V-ing?'],
+mk:'at 5 o\'clock yesterday, while, when, all day, at that moment',
+ex:[['I was working at 8 pm.','В восемь вечера я работал.'],['They weren\'t sleeping.','Они не спали.'],['What were you doing when I called?','Что ты делал, когда я позвонил?']],
+tip:'Часто идёт вместе с Past Simple: длинный фон + короткое действие. I was reading when he came.'},
+{id:'a3',n:'Past Perfect',ru:'Прошедшее совершённое',topic:'',
+use:'Действие, которое завершилось до другого момента или действия в прошлом.',
+f:['+ <b>had</b> + V3','− had <b>not</b> (hadn\'t) + V3','? <b>Had</b> + подлежащее + V3?'],
+mk:'before, after, by the time, already, just, until',
+ex:[['When I arrived, the meeting had started.','Когда я пришёл, совещание уже началось.'],['She hadn\'t eaten before the trip.','Она не ела перед поездкой.'],['Had you finished by 5?','Ты закончил к пяти?']],
+tip:'Сначала Past Perfect (раньше), потом Past Simple (позже).'},
+{id:'a4',n:'Past Perfect Continuous',ru:'Прошедшее совершённое длительное',topic:'',
+use:'Процесс, который длился до определённого момента в прошлом (важна длительность).',
+f:['+ <b>had been</b> + V-ing','− had <b>not been</b> + V-ing','? <b>Had</b> + подлежащее + <b>been</b> + V-ing?'],
+mk:'for, since, all day, how long, before',
+ex:[['He had been waiting for an hour when she came.','Он ждал уже час, когда она пришла.'],['I was tired because I had been working all day.','Я устал, потому что работал весь день.'],['How long had you been studying before the exam?','Как долго ты учился перед экзаменом?']],
+tip:'Past Perfect — результат к моменту, Past Perfect Continuous — процесс до него.'}
+]},
+{g:'Future',sub:'Будущее',items:[
+{id:'f1',n:'Future Simple',ru:'Простое будущее',topic:'',
+use:'Спонтанные решения, предсказания, обещания, будущие факты.',
+f:['+ <b>will</b> + V','− will <b>not</b> (won\'t) + V','? <b>Will</b> + подлежащее + V?'],
+mk:'tomorrow, next week, soon, probably, I think, in 2030',
+ex:[['I\'ll call you tomorrow.','Я позвоню тебе завтра.'],['It won\'t rain today.','Сегодня дождя не будет.'],['Will she help us?','Она нам поможет?']],
+tip:'После if и when (о будущем) will не ставят: If it rains, we will stay. Для заранее принятых планов обычно be going to.'},
+{id:'f2',n:'Future Continuous',ru:'Будущее длительное',topic:'',
+use:'Действие будет в процессе в определённый момент в будущем.',
+f:['+ <b>will be</b> + V-ing','− will <b>not be</b> + V-ing','? <b>Will</b> + подлежащее + <b>be</b> + V-ing?'],
+mk:'at 5 pm tomorrow, this time next week, at this time tomorrow',
+ex:[['This time tomorrow I will be flying to Rome.','Завтра в это время я буду лететь в Рим.'],['She won\'t be working at 6.','В шесть она работать не будет.'],['Will you be using the car tonight?','Ты будешь пользоваться машиной вечером?']],
+tip:'Также так вежливо спрашивают о планах: Will you be coming to the meeting?'},
+{id:'f3',n:'Future Perfect',ru:'Будущее совершённое',topic:'Future Perfect',
+use:'Действие завершится к определённому моменту в будущем.',
+f:['+ <b>will have</b> + V3','− will <b>not have</b> + V3','? <b>Will</b> + подлежащее + <b>have</b> + V3?'],
+mk:'by, by then, by next year, by the time',
+ex:[['By Friday I will have finished the project.','К пятнице я закончу проект.'],['They won\'t have arrived by noon.','К полудню они не приедут.'],['Will you have graduated by 2030?','Ты закончишь учёбу к 2030 году?']],
+tip:'Почти всегда есть срок: by + момент.'},
+{id:'f4',n:'Future Perfect Continuous',ru:'Будущее совершённое длительное',topic:'',
+use:'К определённому моменту в будущем действие будет длиться уже какое-то время.',
+f:['+ <b>will have been</b> + V-ing','− will <b>not have been</b> + V-ing','? <b>Will</b> + подлежащее + <b>have been</b> + V-ing?'],
+mk:'for, by ... for, by the time',
+ex:[['By June she will have been working here for ten years.','К июню она будет работать здесь уже десять лет.'],['By 5 pm we will have been driving for six hours.','К пяти вечера мы будем ехать уже шесть часов.'],['How long will you have been studying by then?','Как долго ты к тому времени будешь учиться?']],
+tip:'Используется редко, в основном в письменной и формальной речи.'}
+]},
+{g:'Future in the Past',sub:'Будущее в прошедшем',items:[
+{id:'w1',n:'Future Simple in the Past',ru:'Простое будущее в прошедшем',topic:'',
+use:'«Будущее» с точки зрения прошлого. Чаще всего в косвенной речи.',
+f:['+ <b>would</b> + V','− would <b>not</b> (wouldn\'t) + V','? <b>Would</b> + подлежащее + V?'],
+mk:'said that, knew that, thought, promised, hoped, the next day, the following week',
+ex:[['She said she would call me.','Она сказала, что позвонит мне.'],['I knew he wouldn\'t come.','Я знал, что он не придёт.'],['He promised he would help.','Он пообещал, что поможет.']],
+tip:'Это will, сдвинутое назад: I think he will come → I thought he would come. Ещё вариант: was / were going to.'},
+{id:'w2',n:'Future Continuous in the Past',ru:'Длительное будущее в прошедшем',topic:'',
+use:'Процесс в будущем, о котором говорят из прошлого.',
+f:['+ <b>would be</b> + V-ing','− would <b>not be</b> + V-ing','? <b>Would</b> + подлежащее + <b>be</b> + V-ing?'],
+mk:'said that, knew that, thought, at that time, the next day',
+ex:[['I knew you would be waiting for me.','Я знал, что ты будешь меня ждать.'],['She said she would be working at 8.','Она сказала, что в восемь будет работать.'],['He thought we would be sleeping.','Он думал, что мы будем спать.']],
+tip:'Это Future Continuous, сдвинутое назад: will be → would be.'},
+{id:'w3',n:'Future Perfect in the Past',ru:'Совершённое будущее в прошедшем',topic:'',
+use:'Действие, которое должно было завершиться к определённому моменту (с точки зрения прошлого).',
+f:['+ <b>would have</b> + V3','− would <b>not have</b> + V3','? <b>Would</b> + подлежащее + <b>have</b> + V3?'],
+mk:'by then, by Friday, said that, hoped that, thought',
+ex:[['He hoped that by Friday they would have finished.','Он надеялся, что к пятнице они закончат.'],['She said she would have left by then.','Она сказала, что к тому времени уже уедет.'],['I thought you would have arrived by now.','Я думал, ты уже приедешь.']],
+tip:'Это Future Perfect, сдвинутое назад: will have → would have.'},
+{id:'w4',n:'Future Perfect Continuous in the Past',ru:'Совершённое длительное будущее в прошедшем',topic:'',
+use:'К моменту в «будущем» (с точки зрения прошлого) действие уже будет длиться какое-то время.',
+f:['+ <b>would have been</b> + V-ing','− would <b>not have been</b> + V-ing','? <b>Would</b> + подлежащее + <b>have been</b> + V-ing?'],
+mk:'by then, for, said that, knew that',
+ex:[['She said that by June she would have been working here for ten years.','Она сказала, что к июню проработает здесь десять лет.'],['I knew that by May we would have been living there for a year.','Я знал, что к маю мы будем жить там уже год.'],['He thought they would have been driving for hours.','Он думал, что они будут ехать уже несколько часов.']],
+tip:'Самая редкая форма. Это Future Perfect Continuous, сдвинутое назад: will have been → would have been.'}
+]}];
+const IC={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',tn:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',st:'<path d="M5 20V10M12 20V4M19 20v-7"/>',gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'};
+const svg=k=>`<svg viewBox="0 0 24 24">${IC[k]}</svg>`;
+const THEMES=[['light','Светлый','linear-gradient(135deg,#e8ebf2,#fff)'],['dark','Тёмный','linear-gradient(135deg,#0b0d13,#262c3d)'],['glass','Стеклянный','linear-gradient(135deg,#cfdcff,#f4f6ff 50%,#ddd0ff)'],['pink','Розовый','linear-gradient(135deg,#fbe9ef,#e0457b)']];
+function curTheme(){let t=null;try{t=localStorage.getItem('gq_theme')}catch(e){}return t||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function applyTheme(t,save){document.documentElement.setAttribute('data-theme',t);if(save)try{localStorage.setItem('gq_theme',t)}catch(e){}}
+function themeModal(){let m=document.getElementById('tm');
+if(!m){m=document.createElement('div');m.id='tm';m.className='md';document.body.appendChild(m);m.onclick=e=>{if(e.target===m)m.classList.remove('on')}}
+const c=curTheme();
+m.innerHTML=`<div class="mc"><h3>Дизайн</h3><div class="thg">${THEMES.map(t=>`<button class="th${t[0]===c?' sel':''}" data-th="${t[0]}"><i style="background:${t[2]}"></i>${t[1]}</button>`).join('')}</div><button class="big" id="tmx">Готово</button></div>`;
+m.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{applyTheme(b.dataset.th,true);m.querySelectorAll('.th').forEach(x=>x.classList.toggle('sel',x===b))});
+document.getElementById('tmx').onclick=()=>m.classList.remove('on');m.classList.add('on')}
+function setNav(k){['home','tn'].forEach(n=>{const e=document.getElementById('s-'+n);if(e)e.classList.toggle('on',n===k)})}
+function tenseBody(t){return `<h4>Когда использовать</h4>${t.use}
+<h4>Формула</h4>${t.f.map(x=>`<div class="fl">${x}</div>`).join('')}
+<h4>Слова-маркеры</h4>${t.mk}
+<h4>Примеры</h4>${t.ex.map(e=>`<div class="ex">${e[0]}<span>${e[1]}</span></div>`).join('')}
+<h4>Важно</h4>${t.tip}
+<button class="pr" data-pr="${t.id}">Потренировать · 5 вопросов</button>`}
+function tensePage(id){const t=TENSES.flatMap(g=>g.items).find(x=>x.id===id);document.onkeydown=null;setNav('tn');
+box.innerHTML=`<div style="margin-bottom:14px"><button class="quit" id="bk2">← Назад</button></div><div class="tp"><h2 style="font-size:26px;margin:0 0 2px">${t.n}</h2><div class="sub" style="margin-bottom:6px">${t.ru}</div><div class="tb" style="padding:0">${tenseBody(t)}</div></div>`;
+document.getElementById('bk2').onclick=home;
+box.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>{mode='mc';round=genRound(GK[b.dataset.pr],5);i=0;score=0;lives=3;streak=0;wrong=[];show()});window.scrollTo(0,0)}
+function buildSB(){const sb=document.getElementById('sb'),bk=document.getElementById('sbk'),hb=document.getElementById('hb');
+sb.innerHTML=`<div class="sbl"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5" style="fill:none"/></svg>fofac</div>
+<button class="si" id="s-home">${svg('home')}<span>Главная</span></button>
+<button class="si" id="s-tn">${svg('tn')}<span>Времена</span></button>
+<div class="sg" id="s-tg">${TENSES.map((g,k)=>`<button class="si sgb" data-g="${k}"><span>${g.g}<small>${g.sub}</small></span><i class="cv"></i></button><div class="sgl" id="sgl${k}">${g.items.map(t=>`<button class="si" data-t="${t.id}"><span>${t.n}</span></button>`).join('')}</div>`).join('')}</div>
+<button class="si sf" id="s-set">${svg('gear')}<span>Настройки</span></button>`;
+const tg=document.getElementById('s-tg');
+const open=()=>{sb.classList.add('open');bk.classList.add('on')},close=()=>{sb.classList.remove('open');bk.classList.remove('on')};
+hb.onclick=()=>sb.classList.contains('open')?close():open();bk.onclick=close;
+document.getElementById('s-home').onclick=()=>{close();home()};
+document.getElementById('s-set').onclick=()=>{close();themeModal()};
+document.getElementById('s-tn').onclick=()=>{const was=sb.classList.contains('open');open();if(was)tg.classList.toggle('show');else tg.classList.add('show')};
+sb.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{document.getElementById('sgl'+b.dataset.g).classList.toggle('show');b.classList.toggle('op')});
+sb.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{close();tensePage(b.dataset.t)})}
+
+/* ===== Генератор вопросов по временам ===== */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const GV=[['work','works','working','worked','worked','at the office'],['play','plays','playing','played','played','football'],['study','studies','studying','studied','studied','English'],['finish','finishes','finishing','finished','finished','the report'],['call','calls','calling','called','called','the client'],['watch','watches','watching','watched','watched','a film'],['clean','cleans','cleaning','cleaned','cleaned','the kitchen'],['open','opens','opening','opened','opened','the window'],['learn','learns','learning','learned','learned','new words'],['go','goes','going','went','gone','to school',1],['eat','eats','eating','ate','eaten','lunch',1],['write','writes','writing','wrote','written','an email',1],['buy','buys','buying','bought','bought','a new phone',1],['take','takes','taking','took','taken','a photo',1],['make','makes','making','made','made','a cake',1],['drink','drinks','drinking','drank','drunk','coffee',1],['meet','meets','meeting','met','met','a new client',1],['see','sees','seeing','saw','seen','the doctor',1],['give','gives','giving','gave','given','a presentation',1],['speak','speaks','speaking','spoke','spoken','English',1]];
+const SP=[{n:'I',i:1},{n:'You'},{n:'We'},{n:'They'},{n:'He',t:1},{n:'She',t:1},{n:'Anna',t:1},{n:'Tom',t:1},{n:'My brother',t:1},{n:'The students'}];
+const SPW=[{n:'I',i:1},{n:'we'},{n:'they'},{n:'he',t:1},{n:'she',t:1}];
+const be=s=>s.i?'am':s.t?'is':'are',bep=s=>(s.i||s.t)?'was':'were',hv=s=>s.t?'has':'have';
+const GF={ps:(s,v)=>s.t?v[1]:v[0],pc:(s,v)=>be(s)+' '+v[2],pp:(s,v)=>hv(s)+' '+v[4],ppc:(s,v)=>hv(s)+' been '+v[2],as:(s,v)=>v[3],ac:(s,v)=>bep(s)+' '+v[2],ap:(s,v)=>'had '+v[4],apc:(s,v)=>'had been '+v[2],fs:(s,v)=>'will '+v[0],fc:(s,v)=>'will be '+v[2],fp:(s,v)=>'will have '+v[4],fpc:(s,v)=>'will have been '+v[2],w1:(s,v)=>'would '+v[0],w2:(s,v)=>'would be '+v[2],w3:(s,v)=>'would have '+v[4],w4:(s,v)=>'would have been '+v[2]};
+const GB={ps:(s,v)=>s.t?v[0]:v[1],pc:(s,v)=>pick(['am','is','are'].filter(x=>x!==be(s)))+' '+v[2],pp:(s,v)=>(s.t?'have ':'has ')+v[4],ppc:(s,v)=>(s.t?'have':'has')+' been '+v[2],as:(s,v)=>v[6]?v[0]+'ed':v[0],ac:(s,v)=>((s.i||s.t)?'were ':'was ')+v[2],ap:(s,v)=>hv(s)+' '+v[4],apc:(s,v)=>'had been '+v[0],fs:(s,v)=>'will '+v[2],fc:(s,v)=>'will '+v[2],fp:(s,v)=>'will '+v[4],fpc:(s,v)=>'will have been '+v[0],w1:(s,v)=>'would '+v[1],w2:(s,v)=>'would '+v[2],w3:(s,v)=>'would '+v[4],w4:(s,v)=>'would have been '+v[0]};
+const GN={ps:'pc',pc:'ps',pp:'as',ppc:'pc',as:'pp',ac:'as',ap:'as',apc:'ap',fs:'ps',fc:'fs',fp:'fs',fpc:'fp',w1:'fs',w2:'w1',w3:'w1',w4:'w3'};
+const GR={ps:['Present Simple','V (с he/she/it — V-s)','с he/she/it нужно -s, с I/you/we/they — без -s'],pc:['Present Continuous','am/is/are + V-ing','am — с I, is — с he/she, are — с you/we/they'],pp:['Present Perfect','have/has + V3','have — с I/you/we/they, has — с he/she'],ppc:['Present Perfect Continuous','have/has been + V-ing','have — с I/you/we/they, has — с he/she'],as:['Past Simple','V2 (-ed или неправильная форма)','нужна вторая форма глагола (V2)'],ac:['Past Continuous','was/were + V-ing','was — с I/he/she, were — с you/we/they'],ap:['Past Perfect','had + V3','в Past Perfect всегда had, а не have/has'],apc:['Past Perfect Continuous','had been + V-ing','после had been нужен глагол с -ing'],fs:['Future Simple','will + V','после will глагол без -ing и без -s'],fc:['Future Continuous','will be + V-ing','после will нужно be + -ing'],fp:['Future Perfect','will have + V3','после will нужно have + V3'],fpc:['Future Perfect Continuous','will have been + V-ing','после will have been нужен глагол с -ing'],w1:['Future Simple in the Past','would + V','после would глагол без -s'],w2:['Future Continuous in the Past','would be + V-ing','после would нужно be + -ing'],w3:['Future Perfect in the Past','would have + V3','после would нужно have + V3'],w4:['Future Perfect Continuous in the Past','would have been + V-ing','после would have been нужен глагол с -ing']};
+const GM={ps:['every day','every morning','on Mondays','every weekend','twice a week'],pc:['now','right now','at the moment','today'],pp:['already','this week','recently','since 2020'],ppc:['for two hours','since morning','all day','for a long time'],as:['yesterday','last week','two days ago','in 2019','last night'],ac:['at 8 o\'clock yesterday','all evening yesterday','at that moment'],ap:['before the meeting started','by 5 o\'clock yesterday','before I arrived'],apc:['for an hour before I arrived','for two hours before the meeting','all day before it rained'],fs:['tomorrow','next week','soon','next year'],fc:['at 8 o\'clock tomorrow','this time tomorrow','all day tomorrow'],fp:['by Friday','by next year','by 2030'],fpc:['for two hours by 5 pm','for ten years by 2030','for a year by June'],w1:['the next day','the following week','the next year'],w2:['at 8 the next morning','this time the next day','all the next day'],w3:['by Friday','by the end of the week','by the next year'],w4:['for two hours by 5 pm','for ten years by the next year','for a year by June']};
+const GK={ps:'ps',pc:'pc',pp:'pp',pcn:'ppc',a1:'as',a2:'ac',a3:'ap',a4:'apc',f1:'fs',f2:'fc',f3:'fp',f4:'fpc',w1:'w1',w2:'w2',w3:'w3',w4:'w4'};
+function genOne(k){
+for(let t=0;t<30;t++){
+const w=k[0]==='w',v=pick(GV),m=pick(GM[k]),S=pick(w?SPW:SP);
+const c=GF[k](S,v),d1=GB[k](S,v),n=GN[k],d2=GF[n](S,v);
+if(new Set([c,d1,d2]).size<3)continue;
+const sent=(w?pick(['Tom','Anna','My boss','The teacher'])+' said that '+S.n+' ':S.n+' ')+'___ '+v[5]+' '+m+'.';
+const arr=sh([[c,''],[d1,GR[k][2]],[d2,d2+' — это '+GR[n][0]+', а здесь нужен '+GR[k][0]]]);
+const q=[sent,arr.map(x=>x[0]),arr.findIndex(x=>x[0]===c),GR[k][0],GR[k][0]+': '+GR[k][1],'',1,arr.map(x=>x[1])];
+q.gen=true;return q}
+return null}
+function genRound(k,n){const out=[],seen=new Set();for(let t=0;t<80&&out.length<n;t++){const q=genOne(k);if(q&&!seen.has(q[0])){seen.add(q[0]);out.push(q)}}return out}
+
+/* ===== Перевод по нажатию на слово ===== */
+const EXTRA=`work:работать;play:играть;study:учиться, изучать;finish:заканчивать;call:звонить;watch:смотреть;clean:убирать;open:открывать;learn:учить;go:идти, ехать;eat:есть;write:писать;buy:покупать;take:брать;make:делать;drink:пить;meet:встречать;see:видеть;give:давать;speak:говорить;office:офис;football:футбол;english:английский;report:отчёт;client:клиент;film:фильм;kitchen:кухня;window:окно;school:школа;lunch:обед;email:электронное письмо;phone:телефон;photo:фото;cake:торт;coffee:кофе;doctor:врач;presentation:презентация;every:каждый;morning:утро;weekend:выходные;twice:дважды;now:сейчас;right:прямо;moment:момент;today:сегодня;already:уже;recently:недавно;since:с (какого-то момента);hour:час;hours:часы;yesterday:вчера;ago:назад;night:ночь;evening:вечер;"o'clock":час (по часам);meeting:встреча, совещание;started:начался;before:до, перед;arrived:прибыл;rained:шёл дождь;tomorrow:завтра;next:следующий;soon:скоро;friday:пятница;monday:понедельник;mondays:по понедельникам;june:июнь;said:сказал;following:следующий;boss:начальник;teacher:учитель;students:студенты;brother:брат;by:к (сроку), около;all:весь;twice:дважды;don't:не (do not);doesn't:не (does not);didn't:не (did not);won't:не будет (will not);haven't:не (have not);hasn't:не (has not);hadn't:не (had not);wasn't:не был;weren't:не были;isn't:не есть;aren't:не есть;can't:не может;i'm:я есть (I am);i'll:я буду;it's:это есть;will:будет (вспомогательное);would:бы, будет (в прошедшем);has:имеет;had:имел;been:был;being:будучи;week:неделя;year:год;month:месяц;time:время;long:долго;last:прошлый;this:этот;that:тот, что;then:тогда;when:когда;while:пока;until:до тех пор, пока;after:после;during:в течение;because:потому что;if:если;so:так, поэтому;but:но;or:или;still:всё ещё;yet:ещё, уже;just:только что;ever:когда-либо;never:никогда;always:всегда;usually:обычно;often:часто;sometimes:иногда`;
+let DICT=null;
+function dict(){if(DICT)return DICT;DICT={};(W1000+';'+EXTRA).split(';').forEach(p=>{const i=p.indexOf(':');if(i>0){const k=p.slice(0,i).trim().toLowerCase().replace(/"/g,'');if(k&&!DICT[k])DICT[k]=p.slice(i+1).trim()}});return DICT}
+const IRR={went:'go',gone:'go',ate:'eat',eaten:'eat',wrote:'write',written:'write',saw:'see',seen:'see',bought:'buy',took:'take',taken:'take',made:'make',drank:'drink',drunk:'drink',met:'meet',spoke:'speak',spoken:'speak',gave:'give',given:'give',was:'be',were:'be',am:'be',is:'be',are:'be',did:'do',does:'do',done:'do',came:'come',knew:'know',thought:'think',found:'find',got:'get',told:'tell',left:'leave',felt:'feel',lost:'lose',paid:'pay',sent:'send',began:'begin',brought:'bring',ran:'run',sat:'sit',stood:'stand',understood:'understand',forgot:'forget',forgotten:'forget',children:'child',men:'man',women:'woman',people:'person'};
+function lookup(w){const D=dict();const x=w.toLowerCase().replace(/’/g,"'").replace(/'s$/,'');
+if(D[x])return D[x];if(IRR[x]&&D[IRR[x]])return D[IRR[x]];
+const c=[];
+if(/ies$/.test(x))c.push(x.slice(0,-3)+'y');
+if(/es$/.test(x))c.push(x.slice(0,-2));
+if(/s$/.test(x))c.push(x.slice(0,-1));
+if(/ied$/.test(x))c.push(x.slice(0,-3)+'y');
+if(/ed$/.test(x)){c.push(x.slice(0,-2));c.push(x.slice(0,-1));c.push(x.slice(0,-3))}
+if(/ing$/.test(x)){c.push(x.slice(0,-3));c.push(x.slice(0,-3)+'e');c.push(x.slice(0,-4))}
+if(/ly$/.test(x))c.push(x.slice(0,-2));
+for(const y of c)if(D[y])return D[y];return null}
+async function webTr(w){try{const c=JSON.parse(localStorage.getItem('gq_tr')||'{}');if(c[w])return c[w];
+const r=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(w)+'&langpair=en|ru');const j=await r.json();
+const t=j&&j.responseData&&j.responseData.translatedText;
+if(t&&!/MYMEMORY|QUERY LENGTH|INVALID/i.test(t)){c[w]=t;localStorage.setItem('gq_tr',JSON.stringify(c));return t}}catch(e){}return null}
+let bubT;
+function bubble(el,html){let b=document.getElementById('bub');if(!b){b=document.createElement('div');b.id='bub';document.body.appendChild(b)}
+b.innerHTML=html;b.style.display='block';b.style.left='0px';b.style.top='0px';
+const r=el.getBoundingClientRect(),w=b.offsetWidth,h=b.offsetHeight;
+let x=r.left+r.width/2-w/2;x=Math.max(8,Math.min(innerWidth-w-8,x));
+let y=r.top-h-10,up=true;if(y<8){y=r.bottom+10;up=false}
+b.style.left=x+'px';b.style.top=y+'px';b.className=up?'up':'dn';b.style.setProperty('--ax',(r.left+r.width/2-x)+'px');
+clearTimeout(bubT);bubT=setTimeout(()=>{b.style.display='none'},5000)}
+document.addEventListener('click',async e=>{const t=e.target.closest&&e.target.closest('.tw'),b=document.getElementById('bub');
+if(!t){if(b)b.style.display='none';return}
+const w=t.textContent,tr=lookup(w);
+if(tr){bubble(t,'<b>'+w+'</b> — '+tr);return}
+bubble(t,'<b>'+w+'</b> — …');
+const o=await webTr(w.toLowerCase());
+bubble(t,'<b>'+w+'</b> — '+(o||'нет в словаре'))});
+function tipify(root){const wk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),ns=[];while(wk.nextNode())ns.push(wk.currentNode);
+ns.forEach(n=>{const t=n.nodeValue;if(!/[A-Za-z]/.test(t))return;const f=document.createDocumentFragment();let last=0;
+t.replace(/[A-Za-z][A-Za-z'’]*/g,(m,off)=>{if(off>last)f.appendChild(document.createTextNode(t.slice(last,off)));const sp=document.createElement('span');sp.className='tw';sp.textContent=m;f.appendChild(sp);last=off+m.length;return m});
+if(last<t.length)f.appendChild(document.createTextNode(t.slice(last)));n.parentNode.replaceChild(f,n)})}
+function watchBox(){new MutationObserver(()=>{box.querySelectorAll('.q:not([data-t]),.ex:not([data-t])').forEach(e=>{e.dataset.t=1;tipify(e)})}).observe(box,{childList:true,subtree:true})}
 function home(){
-document.onkeydown=null;
+document.onkeydown=null;setNav('home');
 box.innerHTML=`<div class="center"><p class="lead">10 вопросов, 3 жизни. Выбери правильный вариант — после ответа увидишь объяснение.</p>
 <div class="sub">Рекорд: ${best} очков</div>
 <div class="lv" id="md"><button data-m="mc">Выбор ответа</button><button data-m="err">🔍 Найди ошибку</button></div>
@@ -272,7 +555,7 @@ function show(){
 const q=round[i];const idx=sh([0,1,2].slice(0,q[1].length));
 box.innerHTML=`<div style="text-align:right;margin-bottom:8px"><button class="quit" id="qt">Выйти</button></div><div class="bar"><span>Вопрос ${i+1}/${round.length}</span><span id="hp" class="dots">${dots()}</span><span id="sc">Очки ${score}${streak>1?' · серия '+streak:''}</span></div>
 <div class="prog"><i style="width:${i/round.length*100}%"></i></div>
-<span class="tag">${q[3]}</span><p class="q">${q[0].replace('___','<b>_____</b>')}</p><div class="ru" title="Нажми, чтобы посмотреть перевод" onclick="this.classList.toggle('show')">${q[5]}</div>
+<span class="tag">${q.gen?'Выбери форму · ':''}${q[3]}</span><p class="q">${q[0].replace('___','<b>_____</b>')}</p>${q[5]?`<div class="ru" title="Нажми, чтобы посмотреть перевод" onclick="this.classList.toggle('show')">${q[5]}</div>`:'<div style="height:18px"></div>'}
 <div class="opts">${idx.map(k=>`<button data-k="${k}">${q[1][k]}</button>`).join('')}</div><div id="fb"></div>`;
 box.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>answer(b,q));wireQuit()}
 function answer(b,q){
@@ -313,12 +596,14 @@ if(p.display==='prompt'||p.display==='prompt-with-rationale')p=await P.requestPe
 if(p.display!=='granted')return;
 const pend=await P.getPending();if(pend.notifications.length)await P.cancel({notifications:pend.notifications});
 const dues=SRS.list.filter(c=>c.st).map(c=>c.st.due).sort((a,b)=>a-b);if(!dues.length)return;
-const now=Date.now(),first=dues[0];let at;
-if(first<=now){at=new Date();at.setHours(10,0,0,0);if(+at<=now+6e4)at.setDate(at.getDate()+1)}
-else{at=new Date(first);at.setHours(10,0,0,0);if(+at<=now+6e4)at=new Date(Math.max(first,now+6e4))}
-const n=dues.filter(d=>d<=+at).length;
-await P.schedule({notifications:[{id:1,title:'fofac',body:'Пора повторять: '+n+' '+(n%10===1&&n%100!==11?'карточка':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'карточки':'карточек'),schedule:{at,allowWhileIdle:true}}]})
+const now=Date.now(),L=[];
+const txt=n=>'Пора повторять: '+n+' '+(n%10===1&&n%100!==11?'карточка':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?'карточки':'карточек');
+const add=at=>{const n=dues.filter(d=>d<=+at).length;if(n&&+at>now+5e3&&!L.some(x=>+x.schedule.at===+at))L.push({id:L.length+1,title:'fofac',body:txt(n),schedule:{at}})};
+if(dues[0]>now+6e4&&dues[0]<now+72e5)add(new Date(dues[0]));
+for(let k=0;k<8;k++){const d=new Date();d.setDate(d.getDate()+k);d.setHours(10,0,0,0);add(d)}
+if(L.length)await P.schedule({notifications:L})
 }catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)planNotif()});
 /* ===== Мои карточки с интервальным повторением (SM-2, как в Anki) ===== */
 const DAY=864e5;
 let SRS={list:[],day:'',n:0,lim:20};
@@ -345,7 +630,7 @@ function srsStats(){rollDay();const now=Date.now();let due=0,nw=0,learned=0;
 SRS.list.forEach(c=>{if(!c.st)nw++;else{if(c.st.due<=now)due++;if(c.st.iv>=21)learned++}});
 return{due,fresh:Math.min(nw,Math.max(0,SRS.lim-SRS.n)),total:SRS.list.length,learned}}
 function srsInfo(){const s=srsStats(),b=document.getElementById('srs');
-if(b)b.innerHTML=`Мои карточки<br><small style="font-weight:400;color:var(--mu)">Всего: ${s.total} · к повторению: ${s.due} · новых сегодня: ${s.fresh}</small>`}
+if(b)b.innerHTML=`<span class="ci"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="12" height="15" rx="2"/><path d="M8 3h9a3 3 0 0 1 3 3v11"/></svg></span><span class="ct"><b>Мои карточки</b><small>Всего: ${s.total} · к повторению: ${s.due} · новых сегодня: ${s.fresh}</small></span><span class="chv"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>`}
 function arm(b,label,fn){let t;const o=b.textContent;
 b.onclick=()=>{if(b.classList.contains('arm')){clearTimeout(t);fn();return}
 b.classList.add('arm');b.textContent=label;t=setTimeout(()=>{b.classList.remove('arm');b.textContent=o},3000)}}
@@ -483,5 +768,6 @@ box.innerHTML=`<div class="center"><h2 style="margin:6px 0;font-size:28px">${rev
 <button class="big" id="hm">К моим карточкам</button>`;
 document.getElementById('hm').onclick=deckScreen}
 
-planNotif();home();
+try{const t=localStorage.getItem("gq_theme");if(t)applyTheme(t)}catch(e){}
+planNotif();buildSB();watchBox();home();
 </script></body></html>
