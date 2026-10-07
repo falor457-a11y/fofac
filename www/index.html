@@ -58,6 +58,14 @@ button.no{background:var(--nos);color:var(--no);border-color:var(--no)}
 .fc{background:var(--card);border-radius:28px;box-shadow:var(--sh);padding:36px 24px;min-height:300px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer}
 .fc.open{cursor:default}
 .fq{font-family:var(--serif);font-size:30px;line-height:1.3;font-weight:600;white-space:pre-wrap;overflow-wrap:anywhere}
+.swr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:14px 16px;border:2px solid var(--bd);border-radius:16px;font-weight:600;font-size:15px}
+.swr small{display:block;font-weight:400;color:var(--mu);font-size:12px;margin-top:2px}
+.sw{flex:none;width:50px;height:30px;border-radius:15px;border:none;background:var(--bd);position:relative;padding:0;transition:background .2s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.sw.on{background:var(--ac)}
+.sw.on::after{transform:translateX(20px)}
+.spk{margin:14px auto 0;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--bd);background:var(--card);color:var(--ac);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+.spk:hover{border-color:var(--ac)}
 .fh{margin-top:26px;font-size:13px;color:var(--mu)}
 .fa{margin-top:24px;padding-top:24px;border-top:1.5px dashed var(--bd);font-size:22px;font-weight:600;color:var(--ac);white-space:pre-wrap;overflow-wrap:anywhere;animation:rv .25s ease}
 .ft{margin-top:10px;font-size:15px;color:var(--mu);white-space:pre-wrap;animation:rv .25s ease}
@@ -436,9 +444,11 @@ function applyTheme(t,save){document.documentElement.setAttribute('data-theme',t
 function themeModal(){let m=document.getElementById('tm');
 if(!m){m=document.createElement('div');m.id='tm';m.className='md';document.body.appendChild(m);m.onclick=e=>{if(e.target===m)m.classList.remove('on')}}
 const c=curTheme();
-m.innerHTML=`<div class="mc"><h3>Дизайн</h3><div class="thg">${THEMES.map(t=>`<button class="th${t[0]===c?' sel':''}" data-th="${t[0]}"><i style="background:${t[2]}"></i>${t[1]}</button>`).join('')}</div><button class="big" id="tmx">Готово</button></div>`;
+m.innerHTML=`<div class="mc"><h3>Дизайн</h3><div class="thg">${THEMES.map(t=>`<button class="th${t[0]===c?' sel':''}" data-th="${t[0]}"><i style="background:${t[2]}"></i>${t[1]}</button>`).join('')}</div><div class="swr"><span>Озвучка слов<small>Американский английский</small></span><button type="button" class="sw${ttsOn()?' on':''}" id="ttsw" role="switch" aria-checked="${ttsOn()}" aria-label="Озвучка"></button></div><button class="big" id="tmx">Готово</button></div>`;
 m.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{applyTheme(b.dataset.th,true);m.querySelectorAll('.th').forEach(x=>x.classList.toggle('sel',x===b))});
+const sw=document.getElementById('ttsw');sw.onclick=()=>{const on=!ttsOn();try{localStorage.setItem('gq_tts',on?'1':'0')}catch(e){}if(!on&&TTS)speechSynthesis.cancel();sw.classList.toggle('on',on);sw.setAttribute('aria-checked',on)};
 document.getElementById('tmx').onclick=()=>m.classList.remove('on');m.classList.add('on')}
+function ttsOn(){if(!TTS)return false;try{return localStorage.getItem('gq_tts')!=='0'}catch(e){return true}}
 function setNav(k){['home','tn'].forEach(n=>{const e=document.getElementById('s-'+n);if(e)e.classList.toggle('on',n===k)})}
 function tenseBody(t){return `<h4>Когда использовать</h4>${t.use}
 <h4>Формула</h4>${t.f.map(x=>`<div class="fl">${x}</div>`).join('')}
@@ -669,11 +679,15 @@ box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>editScreen(b.dataset.e
 box.querySelectorAll('[data-d]').forEach(b=>arm(b,'Точно?',()=>{SRS.list=SRS.list.filter(c=>c.id!==b.dataset.d);srsSave();deckScreen()}));
 clearInterval(dkT);dkT=setInterval(dkTick,5000)}
 
+const IRVB=new Map(`be:was/were:been;have:had:had;do:did:done;say:said:said;go:went:gone;get:got:got/gotten;make:made:made;know:knew:known;think:thought:thought;take:took:taken;see:saw:seen;come:came:come;give:gave:given;find:found:found;tell:told:told;become:became:become;leave:left:left;feel:felt:felt;put:put:put;bring:brought:brought;begin:began:begun;keep:kept:kept;hold:held:held;write:wrote:written;stand:stood:stood;hear:heard:heard;let:let:let;mean:meant:meant;set:set:set;meet:met:met;run:ran:run;pay:paid:paid;sit:sat:sat;speak:spoke:spoken;lie:lay:lain;lead:led:led;read:read:read;grow:grew:grown;lose:lost:lost;fall:fell:fallen;send:sent:sent;build:built:built;understand:understood:understood;draw:drew:drawn;break:broke:broken;spend:spent:spent;cut:cut:cut;rise:rose:risen;drive:drove:driven;buy:bought:bought;wear:wore:worn;choose:chose:chosen;sell:sold:sold;win:won:won;teach:taught:taught;eat:ate:eaten;fly:flew:flown;forget:forgot:forgotten;catch:caught:caught;throw:threw:thrown;sleep:slept:slept;sing:sang:sung;drink:drank:drunk;swim:swam:swum;ride:rode:ridden;hide:hid:hidden;shake:shook:shaken;steal:stole:stolen;wake:woke:woken;fight:fought:fought;hit:hit:hit;hurt:hurt:hurt;cost:cost:cost;shut:shut:shut;lend:lent:lent;lay:laid:laid;light:lit:lit;shoot:shot:shot;shine:shone:shone;sink:sank:sunk;bite:bit:bitten;blow:blew:blown;bend:bent:bent;bet:bet:bet;bind:bound:bound;bleed:bled:bled;breed:bred:bred;burn:burnt/burned:burnt/burned;deal:dealt:dealt;dig:dug:dug;feed:fed:fed;forgive:forgave:forgiven;freeze:froze:frozen;hang:hung:hung;learn:learnt/learned:learnt/learned;seek:sought:sought;spread:spread:spread;swear:swore:sworn;tear:tore:torn;overcome:overcame:overcome;arise:arose:arisen;awake:awoke:awoken;bear:bore:borne/born;beat:beat:beaten;behold:beheld:beheld;beset:beset:beset;bid:bid:bid;broadcast:broadcast:broadcast;cast:cast:cast;cling:clung:clung;creep:crept:crept;dive:dove/dived:dived;dwell:dwelt:dwelt;fit:fit/fitted:fit/fitted;flee:fled:fled;fling:flung:flung;forbid:forbade:forbidden;forecast:forecast:forecast;foresee:foresaw:foreseen;forsake:forsook:forsaken;grind:ground:ground;kneel:knelt:knelt;knit:knit:knit;leap:leapt/leaped:leapt/leaped;mistake:mistook:mistaken;outdo:outdid:outdone;overtake:overtook:overtaken;overdo:overdid:overdone;oversee:oversaw:overseen;prove:proved:proved/proven;quit:quit:quit;rid:rid:rid;saw:sawed:sawn/sawed;sew:sewed:sewn/sewed;shed:shed:shed;shrink:shrank:shrunk;slide:slid:slid;sling:slung:slung;slit:slit:slit;sow:sowed:sown/sowed;speed:sped:sped;spell:spelt/spelled:spelt/spelled;spill:spilt/spilled:spilt/spilled;spin:spun:spun;spit:spat:spat;split:split:split;spoil:spoilt/spoiled:spoilt/spoiled;spring:sprang:sprung;stick:stuck:stuck;sting:stung:stung;stink:stank:stunk;strew:strewed:strewn;stride:strode:stridden;strike:struck:struck;string:strung:strung;strive:strove:striven;sweep:swept:swept;swell:swelled:swollen/swelled;swing:swung:swung;thrust:thrust:thrust;tread:trod:trodden/trod;undergo:underwent:undergone;undertake:undertook:undertaken;undo:undid:undone;uphold:upheld:upheld;upset:upset:upset;weave:wove:woven;wed:wed:wed;weep:wept:wept;wet:wet:wet;wind:wound:wound;withdraw:withdrew:withdrawn;withhold:withheld:withheld;withstand:withstood:withstood;wring:wrung:wrung;rewrite:rewrote:rewritten;rebuild:rebuilt:rebuilt;redo:redid:redone;retell:retold:retold;rethink:rethought:rethought;reset:reset:reset;resell:resold:resold;repay:repaid:repaid;remake:remade:remade;rerun:reran:rerun;misunderstand:misunderstood:misunderstood;misread:misread:misread;mislead:misled:misled;mislay:mislaid:mislaid;input:input:input;offset:offset:offset;outgrow:outgrew:outgrown;outrun:outran:outrun;outsell:outsold:outsold;overeat:overate:overeaten;overhear:overheard:overheard;overpay:overpaid:overpaid;override:overrode:overridden;oversleep:overslept:overslept;underpay:underpaid:underpaid`.split(';').map(x=>{const p=x.split(':');return[p[0],p.slice(0,3).join(' – ')]}));
+const irvbFind=s=>IRVB.get(s.trim().toLowerCase().replace(/^to\s+/,''));
+
 function editScreen(id,note){
 document.onkeydown=null;
 const c=id?SRS.list.find(x=>x.id===id):null;
 box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</button><span>${c?'Редактирование':'Новая карточка'}</span></div>
 <label class="lb" for="f">Лицевая сторона (вопрос / слово)</label><textarea id="f" rows="3"></textarea>
+<div id="irr" class="fb" style="display:none;margin:10px 0 0;padding:12px 14px"></div>
 <label class="lb" for="b">Оборот (ответ)</label><textarea id="b" rows="3"></textarea>
 <label class="lb" for="t">Заметка или пример (необязательно)</label><textarea id="t" rows="2"></textarea>
 <div class="sub" id="msg" style="margin:10px 0 0;min-height:18px">${note||''}</div>
@@ -681,6 +695,14 @@ box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</
 ${c?'':'<button class="big alt" id="sv2">Сохранить и добавить ещё</button>'}`;
 const F=document.getElementById('f'),B=document.getElementById('b'),T=document.getElementById('t');
 if(c){F.value=c.f;B.value=c.b;T.value=c.t||''}
+const IR=document.getElementById('irr');let irrNo='';
+const irrCheck=()=>{const w=F.value.trim().toLowerCase().replace(/^to\s+/,''),forms=irvbFind(F.value);
+if(!forms||w===irrNo||T.value.includes(forms)){IR.style.display='none';return}
+IR.style.display='';
+IR.innerHTML=`<b>${esc(w)}</b>: неправильный глагол. Добавить формы?<br><b>${esc(forms)}</b><div class="lv" style="margin:10px 0 0"><button type="button" id="irY" class="sel">Добавить</button><button type="button" id="irN">Не надо</button></div>`;
+document.getElementById('irY').onclick=()=>{T.value=T.value.trim()?forms+'\n'+T.value.trim():forms;IR.style.display='none'};
+document.getElementById('irN').onclick=()=>{irrNo=w;IR.style.display='none'}};
+F.addEventListener('input',irrCheck);irrCheck();
 const save=more=>{const f=F.value.trim(),b=B.value.trim(),t=T.value.trim();
 if(!f||!b){document.getElementById('msg').textContent='⚠️ Заполни лицевую сторону и оборот.';return}
 if(c){c.f=f;c.b=b;c.t=t}else SRS.list.push({id:uid(),f,b,t});
@@ -746,6 +768,13 @@ box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>add(packs[+b.dataset.p
 box.querySelectorAll('[data-x]').forEach(b=>arm(b,'Вы уверены?',()=>{const pk=packs[+b.dataset.x],k=new Set(pk.w.map(x=>x[0]+'|'+x[1])),n0=SRS.list.length;
 SRS.list=SRS.list.filter(c=>!k.has(c.f+'|'+c.b));srsSave();moduleScreen(m,'🗑 Удалено карточек: '+(n0-SRS.list.length))}))}
 
+const TTS='speechSynthesis'in window;
+function speak(t){if(!ttsOn())return;const s=speechSynthesis;s.cancel();
+const u=new SpeechSynthesisUtterance(String(t).replace(/\s+/g,' ').trim());
+u.lang='en-US';u.rate=.9;
+const v=s.getVoices().find(v=>v.lang.replace('_','-').toLowerCase()==='en-us');
+if(v)u.voice=v;s.speak(u)}
+if(TTS)speechSynthesis.getVoices();
 let queue=[],reviewed=0,nxT=0;
 function srsStart(){
 rollDay();const now=Date.now();
@@ -758,13 +787,15 @@ if(!queue.length)return srsEnd();
 const x=queue[0],c=x.st||fresh0();
 const nNew=queue.filter(y=>!y.st).length,nRep=queue.length-nNew;
 box.innerHTML=`<div class="srsbar"><button class="quit" id="bk">← Назад</button><span>Новых ${nNew} · повторов ${nRep}</span></div>
-<div class="fc${back?' open':''}" id="fc"><div class="fq">${esc(x.f)}</div>${back?`<div class="fa">${esc(x.b)}</div>${x.t?`<div class="ft">${esc(x.t)}</div>`:''}`:'<div class="fh">Нажми на карточку, чтобы увидеть ответ</div>'}</div>
+<div class="fc${back?' open':''}" id="fc"><div class="fq">${esc(x.f)}</div>${ttsOn()?'<button class="spk" id="spk" title="Озвучить (P)" aria-label="Озвучить">🔊</button>':''}${back?`<div class="fa">${esc(x.b)}</div>${x.t?`<div class="ft">${esc(x.t)}</div>`:''}`:'<div class="fh">Нажми на карточку, чтобы увидеть ответ</div>'}</div>
 ${back?`<div class="rt">${['Снова','Трудно','Хорошо','Легко'].map((l,r)=>`<div><small>${fmtIv(c,r)}</small><button class="r${r}" data-r="${r}">${l}</button></div>`).join('')}</div>`
 :`<button class="big" id="sh">Показать ответ</button>`}`;
 document.getElementById('bk').onclick=deckScreen;
+const sp=document.getElementById('spk');if(sp)sp.onclick=e=>{e.stopPropagation();speak(x.f)};
 if(back)box.querySelectorAll('.rt button').forEach(b=>b.onclick=()=>srsRate(+b.dataset.r));
 else document.getElementById('sh').onclick=document.getElementById('fc').onclick=()=>srsCard(true);
 document.onkeydown=e=>{
+if(ttsOn()&&(e.key==='p'||e.key==='P'||e.key==='з'||e.key==='З')){speak(x.f);return}
 if(!back&&(e.key===' '||e.key==='Enter')){e.preventDefault();srsCard(true)}
 else if(back&&/^[1-4]$/.test(e.key))srsRate(+e.key-1)
 else if(back&&e.key===' '){e.preventDefault();srsRate(2)}}}
